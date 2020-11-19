@@ -5,7 +5,7 @@
 
 # 更新feeds文件
 # sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
-# cat feeds.conf.default
+cat feeds.conf.default
 
 # 更新并安装源
 ./scripts/feeds clean
