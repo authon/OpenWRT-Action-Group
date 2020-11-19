@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd openwrt
-
 # 安装额外依赖软件包
 # sudo -E apt-get -y install rename
 
