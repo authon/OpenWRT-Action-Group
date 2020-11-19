@@ -37,7 +37,7 @@ env:
   REPO_TOKEN: ${{ secrets.Tiny_TOKEN }}
   SCKEY: ${{ secrets.WEIXIN_SCKEY }}
   TZ: Asia/Shanghai
-  GITHUB_RELEASE: https://github.com/db-one/OpenWrt-AutoBuild/releases
+  GITHUB_RELEASE: https://github.com/authon/OpenWRT-Action-Group/releases
 
 jobs: 
   build:
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Lean_x86_64,Lienol_x86_64,Lean_x86_64_Long,Lienol_x86_64_Long]  #[Lean_x86_64,Lienol_x86_64,Lean_x86_64_Long,Lienol_x86_64_Long]
+        target: [Tiny-OP]
 
     steps:
     - name: 准备完成
@@ -226,7 +226,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.Tiny_TOKEN }}
       with:
         name: ${{ env.FILE_DATE1 }} 「 ${{ env.WXFB_MESSAGE }} 」固件
         tag_name: ${{ env.FILE_DATE2 }}-${{matrix.target}}
