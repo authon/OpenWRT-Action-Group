@@ -5,7 +5,7 @@
 
 # 更新feeds文件
 # sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
-# cat feeds.conf.default
+cat feeds.conf.default
 
 # 更新并安装源
 ./scripts/feeds clean
@@ -20,8 +20,8 @@ git clone https://github.com/garypang13/luci-theme-edge package/luci-theme-edge 
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # 替换更新默认argon主题
-rm -rf package/lean/luci-theme-argon && git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon -b 18.06
-git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
+# rm -rf package/lean/luci-theme-argon && git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon -b 18.06
+# git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 
 # 替换更新passwall和ssrplus+
 rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
@@ -53,9 +53,9 @@ sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz
 sed -i 's@background-color: #e5effd@background-color: #f8fbfe@g' package/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 sed -i 's#rgba(223, 56, 18, 0.04)#rgba(223, 56, 18, 0.02)#g' package/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 
-#创建自定义配置文件 - OpenWrt-x86-64
+#创建自定义配置文件 - Lean_x86_64
 
-rm -f ./.config*
+cd build/Tiny-OP
 touch ./.config
 
 #
@@ -310,5 +310,8 @@ EOF
 
 
 sed -i 's/^[ \t]*//g' ./.config
+
+# 返回工作目录
+cd ../..
 
 # 配置文件创建完成
