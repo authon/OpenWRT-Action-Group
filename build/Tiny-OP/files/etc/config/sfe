@@ -1,0 +1,9 @@
+
+config sfe 'config'
+	option enabled '1'
+	option ipv6 '0'
+	option wifi '0'
+	option bbr '1'
+	option dns '1'
+	option dns_server '202.96.128.166,202.96.134.133,223.5.5.5'
+
