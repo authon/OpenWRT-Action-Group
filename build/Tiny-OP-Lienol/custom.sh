@@ -1,34 +1,38 @@
+
 #!/bin/bash
 
 # 安装额外依赖软件包
 # sudo -E apt-get -y install rename
 
 # 更新feeds文件
-# sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
+sed -i 's#src-git luci https://github.com/Lienol/openwrt-luci.git;17.01#src-git luci https://github.com/Lienol/openwrt-luci.git;18.06#g' feeds.conf.default #更换luci版本
 cat feeds.conf.default
 
 # 添加第三方软件包
-git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
+git clone https://github.com/authon/authon-openwrt-hub.git -b 19.07 package/authon-openwrt-hub
 
 # 更新并安装源
 ./scripts/feeds clean
 ./scripts/feeds update -a && ./scripts/feeds install -a
 
-# 删除部分默认包
-# rm -rf package/lean/luci-theme-argon
-rm -rf feeds/packages/net/haproxy
+# 为19.07添加libcap-bin依赖
+rm -rf feeds/packages/libs/libcap
+svn co https://github.com/openwrt/packages/trunk/libs/libcap feeds/packages/libs/libcap
 
 # 自定义定制选项
-sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
-sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings #取消系统默认密码
-# sed -i 's#option commit_interval 24h#option commit_interval 10m#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计写入为10分钟
-# sed -i 's#option database_directory /var/lib/nlbwmon#option database_directory /etc/config/nlbwmon_data#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计数据存放默认位置
-sed -i 's@background-color: #e5effd@background-color: #f8fbfe@g' package/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
-sed -i 's#rgba(223, 56, 18, 0.04)#rgba(223, 56, 18, 0.02)#g' package/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
+sed -i 's#192.168.1.1#10.0.0.1#g' package/base-files/files/bin/config_generate #定制默认IP
+sed -i 's#max-width:200px#max-width:1000px#g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm #修改首页样式
+sed -i 's#max-width:200px#max-width:1000px#g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index_x86.htm #修改X86首页样式
+sed -i 's#option commit_interval 24h#option commit_interval 10m#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计写入为10分钟
+sed -i 's#option database_directory /var/lib/nlbwmon#option database_directory /etc/config/nlbwmon_data#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计数据存放默认位置
+sed -i 's@interval: 5@interval: 1@g' package/lean/luci-app-wrtbwmon/htdocs/luci-static/wrtbwmon.js #wrtbwmon默认刷新时间更改为1秒
+sed -i 's@%D %V, %C@%D %V, %C Lienol_x86_64@g' package/base-files/files/etc/banner #自定义banner显示
+sed -i 's@e5effd@f8fbfe@g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
+sed -i 's#223, 56, 18, 0.04#223, 56, 18, 0.02#g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 
-#创建自定义配置文件 - Lean_x86_64
+# 创建自定义配置文件 - Lienol_x86_64
 
-cd build/Tiny-OP
+cd build/Lienol_x86_64
 touch ./.config
 
 #
@@ -46,7 +50,7 @@ touch ./.config
 # 有些插件/选项是默认开启的, 如果想要关闭, 请参照以下示例进行编写:
 # 
 #          =========================================
-#         |  # 取消编译VMware镜像:                   |
+#         |  # 取消编译VMware镜像:                    |
 #         |  cat >> .config <<EOF                   |
 #         |  # CONFIG_VMDK_IMAGES is not set        |
 #         |  EOF                                    |
@@ -87,22 +91,17 @@ cat >> .config <<EOF
 CONFIG_EFI_IMAGES=y
 EOF
 
-# dnsmasq启用
+# IPv6支持:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_dnsmasq_full=y
-CONFIG_PACKAGE_dnsmasq_full_ipset=y
-CONFIG_PACKAGE_kmod-ipt-ipset=y
-# CONFIG_PACKAGE_kmod-sched-ipset is not set
-CONFIG_PACKAGE_ipset=y
-# CONFIG_PACKAGE_ipset-dns is not set
-CONFIG_PACKAGE_libipset=y
+CONFIG_PACKAGE_ipv6helper=y
+CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
 EOF
 
-# IPv6支持:
-# cat >> .config <<EOF
-# CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
-# CONFIG_PACKAGE_ipv6helper is not set
-# EOF
+# 编译VMware镜像以及镜像填充
+cat >> .config <<EOF
+CONFIG_VMDK_IMAGES=y
+CONFIG_TARGET_IMAGES_PAD=y
+EOF
 
 # 多文件系统支持:
 # cat >> .config <<EOF
@@ -115,22 +114,22 @@ EOF
 # EOF
 
 # USB3.0支持:
-cat >> .config <<EOF
-CONFIG_PACKAGE_kmod-usb-ohci=y
-CONFIG_PACKAGE_kmod-usb-ohci-pci=y
-CONFIG_PACKAGE_kmod-usb2=y
-CONFIG_PACKAGE_kmod-usb2-pci=y
-CONFIG_PACKAGE_kmod-usb3=y
-EOF
+# cat >> .config <<EOF
+# CONFIG_PACKAGE_kmod-usb-ohci=y
+# CONFIG_PACKAGE_kmod-usb-ohci-pci=y
+# CONFIG_PACKAGE_kmod-usb2=y
+# CONFIG_PACKAGE_kmod-usb2-pci=y
+# CONFIG_PACKAGE_kmod-usb3=y
+# EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
-# CONFIG_PACKAGE_luci-app-openclash=y #OpenClash
+CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
+# CONFIG_PACKAGE_luci-app-openclash=y #OpenClash客户端
 # CONFIG_PACKAGE_luci-app-serverchan=y #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
-# CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
-# CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
+CONFIG_PACKAGE_luci-app-poweroff=y #关机（增加关机功能）
+CONFIG_PACKAGE_luci-theme-edge=y #edge主题
 EOF
 
 # ShadowsocksR插件:
@@ -138,7 +137,6 @@ cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-ssr-plus=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Socks=y
-CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Kcptun=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
 EOF
 
@@ -163,12 +161,15 @@ CONFIG_PACKAGE_https-dns-proxy=y
 CONFIG_PACKAGE_kcptun-client=y
 CONFIG_PACKAGE_chinadns-ng=y
 CONFIG_PACKAGE_haproxy=y
+CONFIG_PACKAGE_xray=y
 CONFIG_PACKAGE_v2ray=y
 CONFIG_PACKAGE_v2ray-plugin=y
 CONFIG_PACKAGE_simple-obfs=y
-CONFIG_PACKAGE_trojan-Plus=y
+CONFIG_PACKAGE_trojan-plus=y
 CONFIG_PACKAGE_trojan-go=y
 CONFIG_PACKAGE_brook=y
+CONFIG_PACKAGE_ssocks=y
+CONFIG_PACKAGE_naiveproxy=y
 CONFIG_PACKAGE_ipt2socks=y
 CONFIG_PACKAGE_shadowsocks-libev-config=y
 CONFIG_PACKAGE_shadowsocks-libev-ss-local=y
@@ -181,56 +182,58 @@ EOF
 
 # 常用LuCI插件:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
+CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
-CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
-# CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
+CONFIG_PACKAGE_luci-app-frpc=y #Frp内网穿透
 CONFIG_PACKAGE_luci-app-upnp=y #通用即插即用UPnP(端口自动转发)
-CONFIG_PACKAGE_luci-app-accesscontrol=y #上网时间控制
+CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
+CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
 CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
-# CONFIG_PACKAGE_luci-app-frpc=y #Frp内网穿透
+CONFIG_PACKAGE_luci-app-control-mia=y #时间控制
+CONFIG_PACKAGE_luci-app-control-timewol=y #定时唤醒
+CONFIG_PACKAGE_luci-app-control-webrestriction=y #访问限制
+CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
 CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
 CONFIG_PACKAGE_luci-app-wrtbwmon=y #实时流量监测
 CONFIG_PACKAGE_luci-app-sfe=y #高通开源的 Shortcut FE 转发加速引擎
-# CONFIG_PACKAGE_luci-app-flowoffload=y #开源 Linux Flow Offload 驱动
-CONFIG_PACKAGE_luci-app-arpbind=y #IP/MAC绑定
-CONFIG_PACKAGE_luci-app-firewall=y
-CONFIG_PACKAGE_luci-app-ttyd=y
-CONFIG_PACKAGE_luci-app-ntpc=y
-CONFIG_PACKAGE_luci-app-netdata=y
-CONFIG_PACKAGE_luci-app-fileassistant=y
-CONFIG_PACKAGE_luci-app-filebrowser=y
-CONFIG_PACKAGE_luci-app-uhttpd=y
-CONFIG_PACKAGE_luci-app-ramfree=y #内存释放
-CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
-CONFIG_PACKAGE_luci-app-poweroff=y #关机（增加关机功能）
-# CONFIG_PACKAGE_luci-app-haproxy-tcp is not set #Haproxy负载均衡
+# CONFIG_PACKAGE_luci-app-smartdns is not set #smartdns服务器
 # CONFIG_PACKAGE_luci-app-diskman is not set #磁盘管理磁盘信息
-# CONFIG_PACKAGE_luci-app-transmission is not set #TR离线下载
-# CONFIG_PACKAGE_luci-app-qbittorrent is not set #QB离线下载
-# CONFIG_PACKAGE_luci-app-amule is not set #电驴离线下载
-# CONFIG_PACKAGE_luci-app-xlnetacc is not set #迅雷快鸟
-# CONFIG_PACKAGE_luci-app-zerotier is not set #zerotier内网穿透
-# CONFIG_PACKAGE_luci-app-hd-idle is not set #磁盘休眠
+# CONFIG_PACKAGE_luci-app-adguardhome is not set #ADguardHome去广告服务
 # CONFIG_PACKAGE_luci-app-unblockmusic is not set #解锁网易云灰色歌曲
-# CONFIG_PACKAGE_luci-app-airplay2 is not set #Apple AirPlay2音频接收服务器
-# CONFIG_PACKAGE_luci-app-music-remote-center is not set #PCHiFi数字转盘遥控
+# CONFIG_PACKAGE_luci-app-xlnetacc is not set #迅雷快鸟
 # CONFIG_PACKAGE_luci-app-usb-printer is not set #USB打印机
+# CONFIG_PACKAGE_luci-app-mwan3helper is not set #多拨负载均衡
+# CONFIG_PACKAGE_luci-app-mwan3 is not set #多线多拨
+# CONFIG_PACKAGE_luci-app-hd-idle is not set #磁盘休眠
+# CONFIG_PACKAGE_luci-app-zerotier is not set #Zerotier内网穿透
 # CONFIG_PACKAGE_luci-app-sqm is not set #SQM智能队列管理
+#
+# passwall相关(禁用):
+#
 #
 # VPN相关插件(禁用):
 #
+# CONFIG_PACKAGE_luci-app-ipsec-vpnserver-manyusers is not set #ipsec VPN服务
+# CONFIG_PACKAGE_luci-app-pppoe-relay is not set #PPPoE穿透
+# CONFIG_PACKAGE_luci-app-pppoe-server is not set #PPPoE服务器
+# CONFIG_PACKAGE_luci-app-pptp-vpnserver-manyusers is not set #PPTP VPN 服务器
+# CONFIG_PACKAGE_luci-app-trojan-server is not set #Trojan服务器
 # CONFIG_PACKAGE_luci-app-v2ray-server is not set #V2ray服务器
-# CONFIG_PACKAGE_luci-app-pptp-server is not set #PPTP VPN 服务器
-# CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set #ipsec VPN服务
-# CONFIG_PACKAGE_luci-app-openvpn-server is not set #openvpn服务
+# CONFIG_PACKAGE_luci-app-brook-server is not set #brook服务端
+# CONFIG_PACKAGE_luci-app-ssr-libev-server is not set #ssr-libev服务端
+# CONFIG_PACKAGE_luci-app-ssr-python-pro-server is not set #ssr-python服务端
+# CONFIG_PACKAGE_luci-app-kcptun is not set #Kcptun客户端
 # CONFIG_PACKAGE_luci-app-softethervpn is not set #SoftEtherVPN服务器
 #
 # 文件共享相关(禁用):
 #
+# CONFIG_PACKAGE_luci-app-aria2 is not set #Aria2离线下载
 # CONFIG_PACKAGE_luci-app-minidlna is not set #miniDLNA服务
+# CONFIG_PACKAGE_luci-app-kodexplorer is not set #可到私有云
+# CONFIG_PACKAGE_luci-app-filebrowser is not set #File Browser私有云
+# CONFIG_PACKAGE_luci-app-fileassistant is not set #文件助手
 # CONFIG_PACKAGE_luci-app-vsftpd is not set #FTP 服务器
 # CONFIG_PACKAGE_luci-app-samba is not set #网络共享
 # CONFIG_PACKAGE_autosamba is not set #网络共享
@@ -239,14 +242,14 @@ EOF
 
 # LuCI主题:
 cat >> .config <<EOF
-CONFIG_PACKAGE_luci-theme-atmaterial=y
-CONFIG_PACKAGE_luci-theme-netgear=y
-CONFIG_PACKAGE_luci-theme-edge=y
-CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-theme-argon-dark-mod=y
 CONFIG_PACKAGE_luci-theme-argon-light-mod=y
-CONFIG_PACKAGE_luci-theme-bootstrap-mod=y
-CONFIG_PACKAGE_luci-theme-netgear-mc=y
+CONFIG_PACKAGE_luci-theme-bootstrap=y
+# CONFIG_PACKAGE_luci-theme-bootstrap-mod is not set
+# CONFIG_PACKAGE_luci-theme-darkmatter is not set
+# CONFIG_PACKAGE_luci-theme-freifunk-generic is not set
+# CONFIG_PACKAGE_luci-theme-material is not set
+# CONFIG_PACKAGE_luci-theme-openwrt is not set
 EOF
 
 # 常用软件包:
@@ -254,11 +257,12 @@ cat >> .config <<EOF
 CONFIG_PACKAGE_curl=y
 CONFIG_PACKAGE_htop=y
 CONFIG_PACKAGE_nano=y
-CONFIG_PACKAGE_screen=y
-CONFIG_PACKAGE_tree=y
-CONFIG_PACKAGE_vim-fuller=y
+# CONFIG_PACKAGE_screen=y
+# CONFIG_PACKAGE_tree=y
+# CONFIG_PACKAGE_vim-fuller=y
 CONFIG_PACKAGE_wget=y
 CONFIG_PACKAGE_bash=y
+CONFIG_PACKAGE_node=y
 CONFIG_PACKAGE_kmod-tun=y
 CONFIG_PACKAGE_libcap=y
 CONFIG_PACKAGE_libcap-bin=y
@@ -271,16 +275,10 @@ cat >> .config <<EOF
 CONFIG_HAS_FPU=y
 EOF
 
-# 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
-cat >> .config <<EOF
-CONFIG_TARGET_IMAGES_PAD=y
-CONFIG_VMDK_IMAGES=y
-EOF
 
 # 
 # ========================固件定制部分结束========================
 # 
-
 
 sed -i 's/^[ \t]*//g' ./.config
 
@@ -288,3 +286,4 @@ sed -i 's/^[ \t]*//g' ./.config
 cd ../..
 
 # 配置文件创建完成
+

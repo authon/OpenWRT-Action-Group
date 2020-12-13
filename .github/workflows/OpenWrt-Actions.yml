@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Tiny-OP]
+        target: [Tiny-OP,Tiny-OP-Lienol]
 
     steps:
     - name: 准备完成
