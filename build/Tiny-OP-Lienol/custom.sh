@@ -30,9 +30,9 @@ sed -i 's@%D %V, %C@%D %V, %C Lienol_x86_64@g' package/base-files/files/etc/bann
 sed -i 's@e5effd@f8fbfe@g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 sed -i 's#223, 56, 18, 0.04#223, 56, 18, 0.02#g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 
-# 创建自定义配置文件 - Lienol_x86_64
+# 创建自定义配置文件 - Tiny-OP-Lienol
 
-cd build/Lienol_x86_64
+cd build/Tiny-OP-Lienol
 touch ./.config
 
 #
