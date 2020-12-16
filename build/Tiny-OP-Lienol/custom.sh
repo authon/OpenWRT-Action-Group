@@ -206,6 +206,7 @@ CONFIG_PACKAGE_luci-app-netdata=y
 CONFIG_PACKAGE_luci-app-fileassistant=y
 CONFIG_PACKAGE_luci-app-filebrowser=y
 CONFIG_PACKAGE_luci-app-uhttpd=y
+CONFIG_PACKAGE_luci-app-aliddns=y #动态dns
 # CONFIG_PACKAGE_luci-app-smartdns is not set #smartdns服务器
 # CONFIG_PACKAGE_luci-app-diskman is not set #磁盘管理磁盘信息
 # CONFIG_PACKAGE_luci-app-adguardhome is not set #ADguardHome去广告服务
