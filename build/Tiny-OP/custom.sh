@@ -183,7 +183,7 @@ EOF
 cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
-CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
+CONFIG_PACKAGE_luci-app-aliddns=y #DDNS服务
 # CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
