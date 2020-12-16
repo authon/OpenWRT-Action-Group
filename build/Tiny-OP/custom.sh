@@ -88,15 +88,15 @@ CONFIG_EFI_IMAGES=y
 EOF
 
 # dnsmasq启用
-cat >> .config <<EOF
+# cat >> .config <<EOF
 # CONFIG_PACKAGE_dnsmasq_full=y
-CONFIG_PACKAGE_dnsmasq_full_ipset=y
-CONFIG_PACKAGE_kmod-ipt-ipset=y
+# CONFIG_PACKAGE_dnsmasq_full_ipset=y
+# CONFIG_PACKAGE_kmod-ipt-ipset=y
 # CONFIG_PACKAGE_kmod-sched-ipset is not set
-CONFIG_PACKAGE_ipset=y
+# CONFIG_PACKAGE_ipset=y
 # CONFIG_PACKAGE_ipset-dns is not set
-CONFIG_PACKAGE_libipset=y
-EOF
+# CONFIG_PACKAGE_libipset=y
+# EOF
 
 # IPv6支持:
 # cat >> .config <<EOF
