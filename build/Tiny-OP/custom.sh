@@ -88,15 +88,15 @@ CONFIG_EFI_IMAGES=y
 EOF
 
 # dnsmasq启用
-# cat >> .config <<EOF
-# CONFIG_PACKAGE_dnsmasq_full=y
-# CONFIG_PACKAGE_dnsmasq_full_ipset=y
-# CONFIG_PACKAGE_kmod-ipt-ipset=y
+cat >> .config <<EOF
+CONFIG_PACKAGE_dnsmasq_full=y
+CONFIG_PACKAGE_dnsmasq_full_ipset=y
+CONFIG_PACKAGE_kmod-ipt-ipset=y
 # CONFIG_PACKAGE_kmod-sched-ipset is not set
-# CONFIG_PACKAGE_ipset=y
+CONFIG_PACKAGE_ipset=y
 # CONFIG_PACKAGE_ipset-dns is not set
-# CONFIG_PACKAGE_libipset=y
-# EOF
+CONFIG_PACKAGE_libipset=y
+EOF
 
 # IPv6支持:
 # cat >> .config <<EOF
@@ -183,7 +183,7 @@ EOF
 cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
-CONFIG_PACKAGE_luci-app-aliddns=y #DDNS服务
+CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
 # CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
