@@ -254,6 +254,10 @@ cat >> .config <<EOF
 CONFIG_PACKAGE_luci-theme-argon-dark-mod=y
 CONFIG_PACKAGE_luci-theme-argon-light-mod=y
 CONFIG_PACKAGE_luci-theme-bootstrap=y
+CONFIG_PACKAGE_luci-theme-infinityfreedom=y
+CONFIG_PACKAGE_luci-theme-argon=y
+CONFIG_PACKAGE_luci-app-argon-config=y
+CONFIG_PACKAGE_luci-theme-rosy=y
 # CONFIG_PACKAGE_luci-theme-bootstrap-mod is not set
 # CONFIG_PACKAGE_luci-theme-darkmatter is not set
 # CONFIG_PACKAGE_luci-theme-freifunk-generic is not set
