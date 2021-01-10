@@ -92,6 +92,18 @@ cat >> .config <<EOF
 CONFIG_EFI_IMAGES=y
 EOF
 
+# dnsmasq启用
+cat >> .config <<EOF
+CONFIG_PACKAGE_dnsmasq_full=y
+CONFIG_PACKAGE_dnsmasq_full_ipset=y
+CONFIG_PACKAGE_kmod-ipt-ipset=y
+CONFIG_PACKAGE_kmod-sched-ipset=y
+CONFIG_PACKAGE_ipset=y
+CONFIG_PACKAGE_ipset-dns=y
+CONFIG_PACKAGE_libipset=y
+EOF
+
+
 # IPv6支持:
 # cat >> .config <<EOF
 # CONFIG_PACKAGE_ipv6helper=y
