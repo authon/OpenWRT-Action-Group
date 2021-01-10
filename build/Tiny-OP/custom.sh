@@ -250,6 +250,8 @@ CONFIG_PACKAGE_luci-theme-argon-dark-mod=y
 CONFIG_PACKAGE_luci-theme-argon-light-mod=y
 CONFIG_PACKAGE_luci-theme-bootstrap-mod=y
 CONFIG_PACKAGE_luci-theme-netgear-mc=y
+CONFIG_PACKAGE_luci-theme-argon=y
+CONFIG_PACKAGE_luci-app-argon-config=y
 EOF
 
 # 常用软件包:
