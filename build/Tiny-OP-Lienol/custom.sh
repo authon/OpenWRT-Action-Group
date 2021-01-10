@@ -10,7 +10,6 @@ cat feeds.conf.default
 
 # 添加第三方软件包
 git clone https://github.com/authon/authon-openwrt-hub.git -b 19.07 package/authon-openwrt-hub
-svn co https://github.com/openwrt/luci/trunk/openwrt-19.07/collections/luci-ssl-openssl package/diy/luci-ssl-openssl #uhttpd启用https依赖
 
 # 更新并安装源
 ./scripts/feeds clean
