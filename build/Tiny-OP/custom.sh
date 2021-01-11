@@ -15,8 +15,8 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/auth
 ./scripts/feeds update -a && ./scripts/feeds install -a
 
 # 删除部分默认包
-# rm -rf package/lean/luci-theme-argon
-rm -rf feeds/packages/net/haproxy
+rm -rf package/lean/luci-theme-argon
+# rm -rf feeds/packages/net/haproxy
 
 # 自定义定制选项
 sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
