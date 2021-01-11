@@ -8,11 +8,11 @@
 cat feeds.conf.default
 
 # 添加第三方软件包
-git clone https://github.com/fw876/helloworld
-git clone https://github.com/jerrykuku/luci-theme-argon -b 18.06
-git clone https://github.com/jerrykuku/luci-app-argon-config
-git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom
-git clone https://github.com/rosywrt/luci-theme-rosy
+git clone https://github.com/fw876/helloworld /package/helloworld
+git clone https://github.com/jerrykuku/luci-theme-argon -b 18.06 /package/luci-theme-argon
+git clone https://github.com/jerrykuku/luci-app-argon-config /package/luci-app-argon-config
+git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom /package/luci-theme-infinityfreedom
+git clone https://github.com/rosywrt/luci-theme-rosy /package/luci-theme-rosy
 svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-dark-mod
 svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-light-mod
 svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-bootstrap-mod
@@ -23,7 +23,7 @@ svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-bootstrap-
 ./scripts/feeds update -a && ./scripts/feeds install -a
 
 # 删除部分默认包
-# rm -rf package/lean/luci-theme-argon
+rm -rf package/lean/luci-theme-argon
 rm -rf feeds/packages/net/haproxy
 
 # 自定义定制选项
