@@ -8,14 +8,14 @@
 cat feeds.conf.default
 
 # 添加第三方软件包
-git clone https://github.com/fw876/helloworld.git /package/helloworld
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git /package/luci-theme-argon
-git clone https://github.com/jerrykuku/luci-app-argon-config.git /package/luci-app-argon-config
-git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom.git /package/luci-theme-infinityfreedom
-git clone https://github.com/rosywrt/luci-theme-rosy.git /package/luci-theme-rosy
-svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-dark-mod /package/luci-theme-argon-dark-mod
-svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-light-mod /package/luci-theme-argon-light-mod
-svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-bootstrap-mod /package/luci-theme-bootstrap-mod
+git clone https://github.com/fw876/helloworld.git package/helloworld
+git clone https://github.com/jerrykuku/luci-theme-argon.git -b 18.06 package/luci-theme-argon
+git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
+git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom.git package/luci-theme-infinityfreedom
+git clone https://github.com/rosywrt/luci-theme-rosy.git package/luci-theme-rosy
+svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-dark-mod package/luci-theme-argon-dark-mod
+svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-argon-light-mod package/luci-theme-argon-light-mod
+svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
 
 
 # 更新并安装源
