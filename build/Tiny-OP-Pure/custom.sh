@@ -36,7 +36,7 @@ sed -i 's#rgba(223, 56, 18, 0.04)#rgba(223, 56, 18, 0.02)#g' package/luci-theme-
 
 #创建自定义配置文件 - Lean_x86_64
 
-cd build/Tiny-OP
+cd build/Tiny-OP-Pure
 touch ./.config
 
 #
