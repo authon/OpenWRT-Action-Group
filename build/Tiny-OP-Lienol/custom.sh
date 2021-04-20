@@ -15,6 +15,10 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 19.07 package/auth
 ./scripts/feeds clean
 ./scripts/feeds update -a && ./scripts/feeds install -a
 
+# 删除部分默认包
+rm -rf package/lean/luci-app-sfe
+rm -rf package/lean/luci-app-flowoffload
+
 # 为19.07添加libcap-bin依赖
 rm -rf feeds/packages/libs/libcap
 svn co https://github.com/openwrt/packages/trunk/libs/libcap feeds/packages/libs/libcap
