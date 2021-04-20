@@ -20,16 +20,30 @@ rm -rf feeds/packages/libs/libcap
 svn co https://github.com/openwrt/packages/trunk/libs/libcap feeds/packages/libs/libcap
 
 # 自定义定制选项
-sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
-sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings #取消系统默认密码
+
+ZZZ="package/default-settings/files/zzz-default-settings"
+#
+sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate          # 定制默认IP
+sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                             # 取消系统默认密码
+sed -i "/uci commit system/i\uci set system.@system[0].hostname='Authon-WRT'" $ZZZ        # 修改主机名称为OpenWrt-X86
+sed -i "s/OpenWrt /Authon build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ           # 增加自己个性名称
+sed -i 's@.*view/admin_status/index*@#&@g' $ZZZ                                           # 在首页显示一些服务
+# sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                     # 修改内核版本为4.19
+# sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/argon" $ZZZ      # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
+
+# ================================================
+# sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
+# sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings #取消系统默认密码
 sed -i 's#max-width:200px#max-width:1000px#g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm #修改首页样式
 sed -i 's#max-width:200px#max-width:1000px#g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index_x86.htm #修改X86首页样式
-sed -i 's#option commit_interval 24h#option commit_interval 10m#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计写入为10分钟
-sed -i 's#option database_directory /var/lib/nlbwmon#option database_directory /etc/config/nlbwmon_data#g' feeds/packages/net/nlbwmon/files/nlbwmon.config #修改流量统计数据存放默认位置
-sed -i 's@interval: 5@interval: 1@g' package/lean/luci-app-wrtbwmon/htdocs/luci-static/wrtbwmon.js #wrtbwmon默认刷新时间更改为1秒
+sed -i 's#option commit_interval 24h#option commit_interval 10m#g' feeds/packages/net/nlbwmon/files/nlbwmon.config               # 修改流量统计写入为10分钟
+sed -i 's#option database_directory /var/lib/nlbwmon#option database_directory /etc/config/nlbwmon_data#g' feeds/packages/net/nlbwmon/files/nlbwmon.config  # 修改流量统计数据存放默认位置
+sed -i 's#interval: 5#interval: 1#g' package/lean/luci-app-wrtbwmon/htdocs/luci-static/wrtbwmon.js               # wrtbwmon默认刷新时间更改为1秒
+echo -e '\n\nmsgid "This will delete the database file. Are you sure?"\nmsgstr "这将删除数据库文件, 你确定吗? "' >> package/lean/luci-app-wrtbwmon/po/zh-cn/wrtbwmon.po  # wrtbwmon流量统计
 # sed -i 's@%D %V, %C@%D %V, %C Lienol_x86_64@g' package/base-files/files/etc/banner #自定义banner显示
 sed -i 's@e5effd@f8fbfe@g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 sed -i 's#223, 56, 18, 0.04#223, 56, 18, 0.02#g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
+
 
 # 创建自定义配置文件 - Tiny-OP-Lienol
 
@@ -148,9 +162,9 @@ EOF
 # ShadowsocksR插件:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-ssr-plus=y
-CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks=y
-CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Socks=y
-CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
+# CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks=y
+# CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Socks=y
+# CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
 EOF
 
 # Passwall插件:
