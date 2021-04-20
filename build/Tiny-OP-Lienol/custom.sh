@@ -317,9 +317,9 @@ CONFIG_PACKAGE_luci-ssl-openssl=y
 EOF
 
 # 其他软件包:
-cat >> .config <<EOF
-CONFIG_HAS_FPU=y
-EOF
+# cat >> .config <<EOF
+# CONFIG_HAS_FPU=y
+# EOF
 
 
 # 
