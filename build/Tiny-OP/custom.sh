@@ -22,16 +22,14 @@ rm -rf package/lean/luci-app-sfe
 rm -rf package/lean/luci-app-flowoffload
 
 # 自定义定制选项
-
-ZZZ="package/default-settings/files/zzz-default-settings"
+ZZZ="package/lean/default-settings/files/zzz-default-settings"
 #
-sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate          # 定制默认IP
-sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                             # 取消系统默认密码
-sed -i "/uci commit system/i\uci set system.@system[0].hostname='Authon-WRT'" $ZZZ        # 修改主机名称为OpenWrt-X86
-sed -i "s/OpenWrt /Authon build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ           # 增加自己个性名称
-sed -i 's@.*view/admin_status/index*@#&@g' $ZZZ                                           # 在首页显示一些服务
-# sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                     # 修改内核版本为4.19
-# sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/argon" $ZZZ      # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
+sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate                     # 定制默认IP
+sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                                        # 取消系统默认密码
+sed -i "/uci commit system/i\uci set system.@system[0].hostname='Authon-WRT'" $ZZZ                   # 修改主机名称为OpenWrt-X86
+sed -i "s/OpenWrt /ONE build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ                         # 增加自己个性名称
+# sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                                # 修改内核版本为4.19
+# sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/atmaterial_red" $ZZZ        # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
 
 # ================================================
 # sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
@@ -144,7 +142,7 @@ EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
+CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
 # CONFIG_PACKAGE_luci-app-openclash=y #OpenClash
 # CONFIG_PACKAGE_luci-app-serverchan=y #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
