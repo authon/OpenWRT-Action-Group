@@ -1,0 +1,4 @@
+
+
+*/10 * * * * /etc/BanIp.sh 2>&1 >> /tmp/dropBrute.log
+*/30 * * * * sh /root/my_pppoe.sh  restart1
