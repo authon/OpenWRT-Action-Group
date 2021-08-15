@@ -21,7 +21,8 @@ rm -rf package/lean/luci-app-flowoffload
 
 # 为19.07添加libcap-bin依赖
 rm -rf feeds/packages/libs/libcap
-svn co https://github.com/openwrt/packages/trunk/libs/libcap -b openwrt-21.02 feeds/packages/libs/libcap
+# svn co https://github.com/openwrt/packages/trunk/libs/libcap -b openwrt-21.02 feeds/packages/libs/libcap
+svn co https://github.com/openwrt/packages/branches/openwrt-19.07/libs/libcap feeds/packages/libs/libcap
 
 # 自定义定制选项
 
