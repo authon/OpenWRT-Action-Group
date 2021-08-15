@@ -242,6 +242,7 @@ CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
 # CONFIG_PACKAGE_luci-app-usb-printer is not set #USB打印机
 # CONFIG_PACKAGE_luci-app-sqm is not set #SQM智能队列管理
 # CONFIG_PACKAGE_luci-app-uugamebooster=n #UU游戏加速器
+CONFIG_PACKAGE_luci-app-jd-dailybonus=y #京东签到
 
 #
 # VPN相关插件(禁用):
