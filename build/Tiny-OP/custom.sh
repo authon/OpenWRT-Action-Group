@@ -18,9 +18,9 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/auth
 rm -rf package/lean/luci-theme-argon
 rm -rf package/lean/v2ray-plugin
 rm -rf feeds/packages/net/haproxy
-rm -rf package/lean/luci-app-sfe
-rm -rf package/lean/luci-app-flowoffload
-rm -rf package/lean/luci-app-turboacc
+# rm -rf package/lean/luci-app-sfe
+# rm -rf package/lean/luci-app-flowoffload
+# rm -rf package/lean/luci-app-turboacc
 
 # 自定义定制选项
 ZZZ="package/lean/default-settings/files/zzz-default-settings"
@@ -171,6 +171,13 @@ CONFIG_PACKAGE_xray-plugin=y
 CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
 EOF
 
+# Turbo ACC 网络加速:
+cat >> .config <<EOF
+CONFIG_PACKAGE_luci-app-turboacc=y
+# luci-app-turboacc依赖
+CONFIG_PACKAGE_dnsproxy=y
+CONFIG_PACKAGE_dnsforwarder=y
+EOF
 
 # 常用LuCI插件:
 cat >> .config <<EOF
