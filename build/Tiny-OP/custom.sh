@@ -105,6 +105,21 @@ cat >> .config <<EOF
 CONFIG_EFI_IMAGES=y
 EOF
 
+# IPv6支持:
+cat >> .config <<EOF
+CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
+CONFIG_PACKAGE_ipv6helper=y
+EOF
+
+# 编译PVE/KVM、Hyper-V、VMware镜像以及镜像填充
+cat >> .config <<EOF
+CONFIG_QCOW2_IMAGES=y
+CONFIG_VHDX_IMAGES=y
+CONFIG_VMDK_IMAGES=y
+CONFIG_TARGET_IMAGES_PAD=y
+EOF
+
+
 # dnsmasq启用
 # cat >> .config <<EOF
 # CONFIG_PACKAGE_dnsmasq_full=y
@@ -149,6 +164,9 @@ cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
 # CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
 # CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
+# ONFIG_PACKAGE_luci-app-autotimeset=y #定时重启系统，网络
+# CONFIG_PACKAGE_luci-app-ddnsto=y #小宝开发的DDNS.to内网穿透
+# CONFIG_PACKAGE_ddnsto=y #DDNS.to内网穿透软件包
 EOF
 
 # ShadowsocksR插件:
@@ -160,64 +178,83 @@ CONFIG_PACKAGE_luci-app-ssr-plus=y
 EOF
 
 # Passwall插件:
+# cat >> .config <<EOF
+# CONFIG_PACKAGE_luci-app-passwall=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ipt2socks=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ChinaDNS_NG=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_v2ray-plugin=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_simple-obfs=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_GO=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Brook=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_kcptun=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_haproxy=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_dns2socks=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_pdnsd=y
+# CONFIG_PACKAGE_https-dns-proxy=y
+# CONFIG_PACKAGE_kcptun-client=y
+# CONFIG_PACKAGE_chinadns-ng=y
+# CONFIG_PACKAGE_haproxy=y
+# CONFIG_PACKAGE_xray=y
+# CONFIG_PACKAGE_v2ray-plugin=y
+# CONFIG_PACKAGE_simple-obfs=y
+# CONFIG_PACKAGE_trojan-plus=y
+# CONFIG_PACKAGE_trojan-go=y
+# CONFIG_PACKAGE_brook=y
+# CONFIG_PACKAGE_ssocks=y
+# CONFIG_PACKAGE_naiveproxy=y
+# CONFIG_PACKAGE_ipt2socks=y
+# CONFIG_PACKAGE_shadowsocks-libev-config=y
+# CONFIG_PACKAGE_shadowsocks-libev-ss-local=y
+# CONFIG_PACKAGE_shadowsocks-libev-ss-redir=y
+# CONFIG_PACKAGE_shadowsocksr-libev-alt=y
+# CONFIG_PACKAGE_shadowsocksr-libev-ssr-local=y
+# CONFIG_PACKAGE_pdnsd-alt=y
+# CONFIG_PACKAGE_dns2socks=y
+# EOF
+
+# Passwall插件:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-passwall=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ipt2socks=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ChinaDNS_NG=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_v2ray-plugin=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_simple-obfs=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_GO=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Brook=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_kcptun=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_haproxy=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_dns2socks=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_pdnsd=y
-CONFIG_PACKAGE_https-dns-proxy=y
+CONFIG_PACKAGE_naiveproxy=y
 CONFIG_PACKAGE_kcptun-client=y
 CONFIG_PACKAGE_chinadns-ng=y
-CONFIG_PACKAGE_haproxy=y
-CONFIG_PACKAGE_xray=y
-CONFIG_PACKAGE_v2ray-plugin=y
-CONFIG_PACKAGE_simple-obfs=y
-CONFIG_PACKAGE_trojan-plus=y
-CONFIG_PACKAGE_trojan-go=y
 CONFIG_PACKAGE_brook=y
-CONFIG_PACKAGE_ssocks=y
-CONFIG_PACKAGE_naiveproxy=y
-CONFIG_PACKAGE_ipt2socks=y
-CONFIG_PACKAGE_shadowsocks-libev-config=y
-CONFIG_PACKAGE_shadowsocks-libev-ss-local=y
-CONFIG_PACKAGE_shadowsocks-libev-ss-redir=y
-CONFIG_PACKAGE_shadowsocksr-libev-alt=y
-CONFIG_PACKAGE_shadowsocksr-libev-ssr-local=y
-CONFIG_PACKAGE_pdnsd-alt=y
-CONFIG_PACKAGE_dns2socks=y
+CONFIG_PACKAGE_trojan-go=y
+CONFIG_PACKAGE_xray-plugin=y
+CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
 EOF
+
+# Turbo ACC 网络加速:
+cat >> .config <<EOF
+CONFIG_PACKAGE_luci-app-turboacc=y
+# luci-app-turboacc依赖
+CONFIG_PACKAGE_dnsproxy=y
+CONFIG_PACKAGE_dnsforwarder=y
 
 # 常用LuCI插件:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
+CONFIG_PACKAGE_luci-app-adbyby-plus=n #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
 CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
-# CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
+CONFIG_DEFAULT_luci-app-vlmcsd=n #KMS激活服务器
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
 CONFIG_PACKAGE_luci-app-upnp=y #通用即插即用UPnP(端口自动转发)
 CONFIG_PACKAGE_luci-app-accesscontrol=y #上网时间控制
 CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
-# CONFIG_PACKAGE_luci-app-frpc=y #Frp内网穿透
-# CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
-# CONFIG_PACKAGE_luci-app-wrtbwmon=y #实时流量监测
-# CONFIG_PACKAGE_luci-app-sfe=y #高通开源的 Shortcut FE 转发加速引擎
-# CONFIG_PACKAGE_luci-app-flowoffload=y #开源 Linux Flow Offload 驱动
+CONFIG_PACKAGE_luci-app-frpc=n #Frp内网穿透
+CONFIG_PACKAGE_luci-app-nlbwmon=n #宽带流量监控
+CONFIG_PACKAGE_luci-app-wrtbwmon=n #实时流量监测
+CONFIG_PACKAGE_luci-app-sfe=n #高通开源的 Shortcut FE 转发加速引擎
+CONFIG_PACKAGE_luci-app-flowoffload=n #开源 Linux Flow Offload 驱动
 CONFIG_PACKAGE_luci-app-arpbind=y #IP/MAC绑定
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ntpc=y
-# CONFIG_PACKAGE_luci-app-netdata is not set #使用监控（日志报错不启用）
+CONFIG_PACKAGE_luci-app-netdata=n #使用监控（日志报错不启用）
 CONFIG_PACKAGE_luci-app-fileassistant=y
 CONFIG_PACKAGE_luci-app-filebrowser=y
 CONFIG_PACKAGE_luci-app-uhttpd=y
@@ -228,30 +265,32 @@ CONFIG_PACKAGE_luci-app-control-mia=y #时间控制
 CONFIG_PACKAGE_luci-app-control-timewol=y #定时唤醒
 CONFIG_PACKAGE_luci-app-control-webrestriction=y #访问限制
 CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
-# CONFIG_PACKAGE_luci-app-haproxy-tcp is not set #Haproxy负载均衡
-# CONFIG_PACKAGE_luci-app-diskman is not set #磁盘管理磁盘信息
-# CONFIG_PACKAGE_luci-app-transmission is not set #TR离线下载
-# CONFIG_PACKAGE_luci-app-qbittorrent is not set #QB离线下载
-# CONFIG_PACKAGE_luci-app-amule is not set #电驴离线下载
-# CONFIG_PACKAGE_luci-app-xlnetacc is not set #迅雷快鸟
-# CONFIG_PACKAGE_luci-app-zerotier is not set #zerotier内网穿透
-# CONFIG_PACKAGE_luci-app-hd-idle is not set #磁盘休眠
-# CONFIG_PACKAGE_luci-app-unblockmusic is not set #解锁网易云灰色歌曲
-# CONFIG_PACKAGE_luci-app-airplay2 is not set #Apple AirPlay2音频接收服务器
-# CONFIG_PACKAGE_luci-app-music-remote-center is not set #PCHiFi数字转盘遥控
-# CONFIG_PACKAGE_luci-app-usb-printer is not set #USB打印机
-# CONFIG_PACKAGE_luci-app-sqm is not set #SQM智能队列管理
-# CONFIG_PACKAGE_luci-app-uugamebooster=n #UU游戏加速器
+CONFIG_PACKAGE_luci-app-haproxy-tcp=n #Haproxy负载均衡
+CONFIG_PACKAGE_luci-app-diskman=n #磁盘管理磁盘信息
+CONFIG_PACKAGE_luci-app-transmission=n #TR离线下载
+CONFIG_PACKAGE_luci-app-qbittorrent=n #QB离线下载
+CONFIG_PACKAGE_luci-app-amule=n #电驴离线下载
+CONFIG_PACKAGE_luci-app-xlnetacc=n #迅雷快鸟
+CONFIG_PACKAGE_luci-app-zerotier=n #zerotier内网穿透
+CONFIG_PACKAGE_luci-app-hd-idle=n #磁盘休眠
+CONFIG_PACKAGE_luci-app-unblockmusic=n #解锁网易云灰色歌曲
+CONFIG_PACKAGE_luci-app-airplay2=n #Apple AirPlay2音频接收服务器
+CONFIG_PACKAGE_luci-app-music-remote-center=n #PCHiFi数字转盘遥控
+CONFIG_PACKAGE_luci-app-usb-printer=n #USB打印机
+CONFIG_PACKAGE_luci-app-sqm=n #SQM智能队列管理
+CONFIG_PACKAGE_luci-app-uugamebooster=n #UU游戏加速器
 CONFIG_PACKAGE_luci-app-jd-dailybonus=y #京东签到
+CONFIG_PACKAGE_luci-app-dockerman=n #Docker管理
+CONFIG_PACKAGE_luci-app-wireguard=n #wireguard端
 
 #
 # VPN相关插件(禁用):
 #
-# CONFIG_PACKAGE_luci-app-v2ray-server is not set #V2ray服务器
-# CONFIG_PACKAGE_luci-app-pptp-server is not set #PPTP VPN 服务器
-# CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set #ipsec VPN服务
-# CONFIG_PACKAGE_luci-app-openvpn-server is not set #openvpn服务
-# CONFIG_PACKAGE_luci-app-softethervpn is not set #SoftEtherVPN服务器
+CONFIG_PACKAGE_luci-app-v2ray-server=n #V2ray服务器
+CONFIG_PACKAGE_luci-app-pptp-server=n #PPTP VPN 服务器
+CONFIG_PACKAGE_luci-app-ipsec-vpnd=n #ipsec VPN服务
+CONFIG_PACKAGE_luci-app-openvpn-server=n #openvpn服务
+CONFIG_PACKAGE_luci-app-softethervpn=n #SoftEtherVPN服务器
 #
 #
 # 文件共享相关(禁用):
