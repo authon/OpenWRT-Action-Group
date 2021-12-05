@@ -112,26 +112,23 @@ jobs:
         # 复制配置文件到源码目录
         cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
         cd openwrt
-
         echo "执行脚本"
-        if [ -f "build/${{matrix.target}}/$CUSTOM_SH" ]; then
+        if [ -f "${WORKPATH}/$CUSTOM_SH" ]; then
         (
-          chmod +x build/${{matrix.target}}/$CUSTOM_SH
-          /bin/bash "build/${{matrix.target}}/$CUSTOM_SH"
+          chmod +x ${WORKPATH}/$CUSTOM_SH
+          /bin/bash "${WORKPATH}/$CUSTOM_SH"
         )
         fi
-
         echo "复制文件..."
-        if [ -n "$(ls -A "build/${{matrix.target}}/files" 2>/dev/null)" ]; then
-         cp -rf build/${{matrix.target}}/files files
+        if [ -n "$(ls -A "${WORKPATH}/files" 2>/dev/null)" ]; then
+         cp -rf ${WORKPATH}/files files
+         chmod -R 755 ${WORKPATH}/files/* ./
         fi
-        if [ -n "$(ls -A "build/${{matrix.target}}/sources" 2>/dev/null)" ]; then
-         cp -Rf build/${{matrix.target}}/sources/* ./
+        if [ -n "$(ls -A "${WORKPATH}/sources" 2>/dev/null)" ]; then
+         cp -Rf ${WORKPATH}/sources/* ./
         fi
-        chmod -R 755 ./
-
-        echo "写入配置文件"
-         mv build/${{matrix.target}}/$CONFIG_FILE .config
+        echo "写入配置文件..."
+        mv ${WORKPATH}/$CONFIG_FILE .config
         make defconfig
 
     - name: SSH远程连接服务器配置固件
@@ -153,6 +150,19 @@ jobs:
         sed -i 's/=y/\ /g' Plug-in
         awk '$0=NR$0' Plug-in > Plug-2
         awk '{print "	" $0}' Plug-2 > Plug-in
+        echo
+        echo
+        echo "	      已选插件列表"
+        cat Plug-in
+        rm -rf {Plug-in,Plug-2}
+        echo
+        echo "=========================================="
+        echo
+        echo
+        echo "输出完整插件信息..."
+        echo
+        echo
+        cat .config
 
     - name: 下载软件包
       run: |
