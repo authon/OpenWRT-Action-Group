@@ -230,6 +230,8 @@ CONFIG_PACKAGE_luci-app-ramfree=y #内存释放
 # CONFIG_PACKAGE_luci-app-music-remote-center is not set #PCHiFi数字转盘遥控
 # CONFIG_PACKAGE_luci-app-usb-printer is not set #USB打印机
 # CONFIG_PACKAGE_luci-app-sqm is not set #SQM智能队列管理
+CONFIG_PACKAGE_luci-app-dockerman=n #Docker管理
+CONFIG_PACKAGE_luci-app-wireguard=n #wireguard端
 #
 # VPN相关插件(禁用):
 #
