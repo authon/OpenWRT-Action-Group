@@ -20,7 +20,6 @@ rm -rf package/lean/v2ray-plugin
 rm -rf feeds/packages/net/haproxy
 rm -rf package/lean/luci-app-sfe
 rm -rf package/lean/luci-app-flowoffload
-rm -rf package/lean/luci-app-turboacc
 
 # 自定义定制选项
 ZZZ="package/lean/default-settings/files/zzz-default-settings"
