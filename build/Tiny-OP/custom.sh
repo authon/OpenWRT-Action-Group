@@ -46,7 +46,7 @@ sed -i "s/OpenWrt /Authon build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ 
 # sed -i 's#223, 56, 18, 0.04#223, 56, 18, 0.02#g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 #创建自定义配置文件 - Lean_x86_64
 
-cd build/Tiny-OP
+cd $WORKPATH
 touch ./.config
 
 #
@@ -289,6 +289,6 @@ EOF
 sed -i 's/^[ \t]*//g' ./.config
 
 # 返回工作目录
-cd ../..
+cd $HOME
 
 # 配置文件创建完成
