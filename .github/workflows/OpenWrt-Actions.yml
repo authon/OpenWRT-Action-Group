@@ -70,6 +70,10 @@ jobs:
         echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV
         echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
         echo "SERVERCHAN_SCKEY=${SERVERCHAN_SCKEY}" >> $GITHUB_ENV
+        #添加变量
+        echo "HOME=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
+        echo "WORKPATH=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
+
 
     - name: 开始安装编译所需系统
       env:
