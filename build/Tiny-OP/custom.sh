@@ -41,8 +41,6 @@ sed -i 's#max-width:200px#max-width:1000px#g' feeds/luci/modules/luci-mod-admin-
 # sed -i 's#interval: 5#interval: 1#g' package/lean/luci-app-wrtbwmon/htdocs/luci-static/wrtbwmon.js               # wrtbwmon默认刷新时间更改为1秒
 # echo -e '\n\nmsgid "This will delete the database file. Are you sure?"\nmsgstr "这将删除数据库文件, 你确定吗? "' >> package/lean/luci-app-wrtbwmon/po/zh-cn/wrtbwmon.po  # wrtbwmon流量统计
 # sed -i 's@%D %V, %C@%D %V, %C Lienol_x86_64@g' package/base-files/files/etc/banner #自定义banner显示
-sed -i 's@e5effd@f8fbfe@g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
-sed -i 's#223, 56, 18, 0.04#223, 56, 18, 0.02#g' package/dbone-update/luci-theme-edge/htdocs/luci-static/edge/cascade.css #luci-theme-edge主题颜色微调
 #创建自定义配置文件 - Lean_x86_64
 
 cd build/Tiny-OP
@@ -147,13 +145,13 @@ EOF
 # EOF
 
 # USB3.0支持:
-# cat >> .config <<EOF
-# # CONFIG_PACKAGE_kmod-usb-ohci=y
-# CONFIG_PACKAGE_kmod-usb-ohci-pci=y
-# CONFIG_PACKAGE_kmod-usb2=y
-# CONFIG_PACKAGE_kmod-usb2-pci=y
-# CONFIG_PACKAGE_kmod-usb3=y
-# EOF
+cat >> .config <<EOF
+CONFIG_PACKAGE_kmod-usb-ohci=y
+CONFIG_PACKAGE_kmod-usb-ohci-pci=y
+CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_kmod-usb2-pci=y
+CONFIG_PACKAGE_kmod-usb3=y
+EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
@@ -161,11 +159,11 @@ cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-openclash=y #OpenClash
 # CONFIG_PACKAGE_luci-app-serverchan=y #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
-# CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
-# CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
-# ONFIG_PACKAGE_luci-app-autotimeset=y #定时重启系统，网络
-# CONFIG_PACKAGE_luci-app-ddnsto=y #小宝开发的DDNS.to内网穿透
-# CONFIG_PACKAGE_ddnsto=y #DDNS.to内网穿透软件包
+# CONFIG_PACKAGE_luci-app-smartdns=n #smartdns服务器
+# CONFIG_PACKAGE_luci-app-adguardhome=n #ADguardhome
+# ONFIG_PACKAGE_luci-app-autotimeset=n #定时重启系统，网络
+# CONFIG_PACKAGE_luci-app-ddnsto=n #小宝开发的DDNS.to内网穿透
+# CONFIG_PACKAGE_ddnsto=n #DDNS.to内网穿透软件包
 EOF
 
 # ShadowsocksR插件:
