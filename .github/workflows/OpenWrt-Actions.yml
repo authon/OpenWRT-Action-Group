@@ -230,28 +230,12 @@ jobs:
         name: OpenWrt_buildinfo_${{matrix.target}}_${{ env.FILE_DATE }}
         path: ./artifact/buildinfo/
 
-    - name: 上传固件到 奶牛快传
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ./artifact/firmware/ 2>&1 | tee cowtransfer.log
-        echo "::warning file=奶牛快传（${{matrix.target}}）::$(cat cowtransfer.log | grep https)"
-
     - name: 上传固件到 WeTransfer
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ./artifact/firmware/ 2>&1 | tee wetransfer.log
         echo "::warning file=WeTransfer（${{matrix.target}}）::$(cat wetransfer.log | grep https)"
-    
-    - name: 提取发布用的「奶牛快传」和「WeTransfer」的链接
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ./artifact/firmware/ 2>&1 | tee cowtransfer.log
-        echo "COWTRANSFER_URL=$(cat cowtransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV 
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ./artifact/firmware/ 2>&1 | tee wetransfer.log
         echo "WETRANSFER_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV 
 
     - name: 自动发布固件到 Releases
@@ -268,8 +252,6 @@ jobs:
             ☆  感谢源码作者无私分享！
             
             🎉 [ ${{ env.WXFB_MESSAGE }} ]固件下载 ✨
-            
-            💐 奶牛快传(国内高速🚀下载)： ${{ env.COWTRANSFER_URL }}
             
             ⛄ WeTransfer(国外高速🚀下载)： ${{ env.WETRANSFER_URL }}
             
@@ -309,11 +291,8 @@ jobs:
               
               
               发布地址：${{ env.GITHUB_RELEASE }}
-              
-              
-              奶牛快传：${{ env.COWTRANSFER_URL }}
-              
-              
+          
+                  
               WeTransfer：${{ env.WETRANSFER_URL }}
               
               
