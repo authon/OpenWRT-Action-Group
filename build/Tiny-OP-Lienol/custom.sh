@@ -5,7 +5,7 @@
 # sudo -E apt-get -y install rename
 
 # 更新feeds文件
-sed -i 's#src-git luci https://github.com/Lienol/openwrt-luci.git;17.01#src-git luci https://github.com/Lienol/openwrt-luci.git;18.06#g' feeds.conf.default #更换luci版本
+sed -i 's#src-git luci https://github.com/Lienol/openwrt-luci.git;17.01#src-git luci https://github.com/Lienol/openwrt-luci.git;21.02#g' feeds.conf.default #更换luci版本
 cat feeds.conf.default
 
 # 添加第三方软件包
@@ -21,9 +21,9 @@ rm -rf package/lean/luci-app-flowoffload
 rm -rf package/lean/luci-app-turboacc
 
 # 为19.07添加libcap-bin依赖
-rm -rf feeds/packages/libs/libcap
+# rm -rf feeds/packages/libs/libcap
 # svn co https://github.com/openwrt/packages/trunk/libs/libcap -b openwrt-21.02 feeds/packages/libs/libcap
-svn co https://github.com/openwrt/packages/branches/openwrt-19.07/libs/libcap feeds/packages/libs/libcap
+# svn co https://github.com/openwrt/packages/branches/openwrt-19.07/libs/libcap feeds/packages/libs/libcap
 
 # 自定义定制选项
 
