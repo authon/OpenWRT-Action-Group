@@ -165,7 +165,7 @@ CONFIG_PACKAGE_luci-app-ssr-plus=y
 # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
 EOF
 
-# ShadowsocksR插件:
+# Helloword插件:
 CONFIG_PACKAGE_luci-app-vssr=y
 
 # Passwall插件2:
