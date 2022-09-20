@@ -149,12 +149,12 @@ EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
-# CONFIG_PACKAGE_luci-app-openclash=y #OpenClash
-# CONFIG_PACKAGE_luci-app-serverchan=y #微信推送
+# CONFIG_PACKAGE_luci-app-oaf=n #应用过滤
+# CONFIG_PACKAGE_luci-app-openclash=n #OpenClash
+# CONFIG_PACKAGE_luci-app-serverchan=n #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
-# CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
-# CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
+# CONFIG_PACKAGE_luci-app-smartdns=n #smartdns服务器
+# CONFIG_PACKAGE_luci-app-adguardhome=n #ADguardhome
 EOF
 
 # ShadowsocksR插件:
@@ -193,17 +193,17 @@ cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
 CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
-# CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
+CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-autoreboot=y #定时重启
 CONFIG_PACKAGE_luci-app-upnp=y #通用即插即用UPnP(端口自动转发)
 CONFIG_PACKAGE_luci-app-accesscontrol=y #上网时间控制
 CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
-# CONFIG_PACKAGE_luci-app-frpc=y #Frp内网穿透
-# CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
-# CONFIG_PACKAGE_luci-app-wrtbwmon=y #实时流量监测
-# CONFIG_PACKAGE_luci-app-sfe=y #高通开源的 Shortcut FE 转发加速引擎
-# CONFIG_PACKAGE_luci-app-flowoffload=y #开源 Linux Flow Offload 驱动
+# CONFIG_PACKAGE_luci-app-frpc=n #Frp内网穿透
+# CONFIG_PACKAGE_luci-app-nlbwmon=n #宽带流量监控
+# CONFIG_PACKAGE_luci-app-wrtbwmon=n #实时流量监测
+# CONFIG_PACKAGE_luci-app-sfe=n #高通开源的 Shortcut FE 转发加速引擎
+# CONFIG_PACKAGE_luci-app-flowoffload=n #开源 Linux Flow Offload 驱动
 CONFIG_PACKAGE_luci-app-arpbind=y #IP/MAC绑定
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-ttyd=y
