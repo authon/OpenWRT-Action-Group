@@ -61,6 +61,7 @@ jobs:
         echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV
         echo "WXFB_MESSAGE=${WXFB_MESSAGE}" >> $GITHUB_ENV
         echo "CUSTOM_SH=${CUSTOM_SH}" >> $GITHUB_ENV
+        echo "CACHE_BUILD=${CACHE_BUILD}" >> $GITHUB_ENV
         echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
         echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
         echo "UPLOAD_VMDK=${UPLOAD_VMDK}" >> $GITHUB_ENV
@@ -83,9 +84,11 @@ jobs:
         sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
         sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
         sudo -E apt-get update
-        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig
+        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig libc6-dev-i386 libc6-dev libncurses5 libtinfo-dev libtinfo5 ncurses-doc python2.7 git-core wget curl rsync
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get clean
+        
+        df -hT
 
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
@@ -97,7 +100,14 @@ jobs:
         df -hT $PWD
         git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
+        
+    - name: 缓存加速
+      uses: klever1988/cachewrtbuild@main
+      if: env.CACHE_BUILD == 'true'
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
+    
     - name: 更新时区、编译时间
       id: date
       run: |
@@ -106,6 +116,9 @@ jobs:
         echo "FILE_DATE=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
         echo "FILE_DATE1=$(date "+%Y年%m月%d号-%H点%M分")" >> $GITHUB_ENV
         echo "FILE_DATE2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
+        echo "编译开始时间..."
+        START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+        echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
     - name: 加载源,定制文件并生成自定义配置
       run: |
@@ -140,13 +153,21 @@ jobs:
         cd openwrt
         echo " 系统空间      类型   总数  已用  可用 使用率"
         df -hT $PWD
+        
+        echo
+        echo "=========================================="
+        echo
+        ZZZ="package/lean/default-settings/files/zzz-default-settings"
+        echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
+        echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
         echo
         echo "=========================================="
         grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
         grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
         sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
         sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-        sed -i '/qbittorrent_static/d' Plug-in > /dev/null 2>&1
+        sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
+        sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
         sed -i 's/=y/\ /g' Plug-in
         awk '$0=NR$0' Plug-in > Plug-2
         awk '{print "	" $0}' Plug-2 > Plug-in
@@ -195,12 +216,22 @@ jobs:
         mkdir -p ./artifact/vmware
         mkdir -p ./artifact/package
         mkdir -p ./artifact/buildinfo
+        cp -rf openwrt/.config ./artifact/buildinfo/${{matrix.target}}.config
         rm -rf $(find openwrt/bin/targets/ -type d -name "packages")
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ./artifact/package/
         cp -rf $(find openwrt/bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
         cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*img*") ./artifact/firmware/
-        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vmdk*") ./artifact/vmware/
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*qcow2*") ./artifact/pvekvm/ || true
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vhdx*") ./artifact/hyperv/ || true
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vmdk*") ./artifact/vmware/ || true
         echo "::set-output name=status::success"
+        echo "编译完成时间..."
+        START_SECONDS=${{ env.START_SECONDS }}
+        END_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+        END_SECONDS=$(date --date="$END_TIME" +%s)
+        SECONDS=$((END_SECONDS-START_SECONDS))
+        HOUR=$(( $SECONDS/3600 )) && MIN=$(( ($SECONDS-${HOUR}*3600)/60 )) && SEC=$(( $SECONDS-${HOUR}*3600-${MIN}*60 ))
+        echo "BUILD_TIME=${HOUR}时${MIN}分${SEC}秒" >> $GITHUB_ENV
 
     - name: 上传固件文件
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
