@@ -107,19 +107,19 @@ EOF
 
 ## IPv6支持:
 # cat >> .config <<EOF
-# CONFIG_PACKAGE_dnsmasq_full_dhcpv6=n
-# CONFIG_PACKAGE_ipv6helper=n
+# CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
+# CONFIG_PACKAGE_ipv6helper  is not set
 # EOF
 
 # dnsmasq启用
 # cat >> .config <<EOF
-# CONFIG_PACKAGE_dnsmasq_full=y
-# CONFIG_PACKAGE_dnsmasq_full_ipset=y
-# CONFIG_PACKAGE_kmod-ipt-ipset=y
+# CONFIG_PACKAGE_dnsmasq_full is not set
+# CONFIG_PACKAGE_dnsmasq_full_ipset is not set
+# CONFIG_PACKAGE_kmod-ipt-ipset is not set
 # # CONFIG_PACKAGE_kmod-sched-ipset is not set
-# CONFIG_PACKAGE_ipset=y
+# CONFIG_PACKAGE_ipset is not set
 # # CONFIG_PACKAGE_ipset-dns is not set
-# CONFIG_PACKAGE_libipset=y
+# CONFIG_PACKAGE_libipset is not set
 # EOF
 
 # IPv6支持:
