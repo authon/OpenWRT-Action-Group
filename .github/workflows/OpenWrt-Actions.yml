@@ -19,7 +19,7 @@ on:
 
 # 定时触发编译(每天早2点)
   schedule:
-    - cron: 0 18 * * *
+    - cron: 0 17 * * *
 
 # 点赞☆Star触发编译
   watch:
