@@ -11,7 +11,7 @@ cat feeds.conf.default
 git clone https://github.com/fw876/helloworld.git package/helloworld
 git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
-git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
+# git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
 
 # 更新并安装源
 ./scripts/feeds clean
