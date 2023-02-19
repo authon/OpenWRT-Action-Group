@@ -17,9 +17,9 @@ on:
         required: false
         default: 'ssh-actions'
 
-# 定时触发编译(每天早2点)
+# 定时触发编译(1,2,5,6,8,10,12,15,16,18,20,22,25,26,28,30早3点)
   schedule:
-    - cron: 0 17 * * *
+    - cron: 0 19 1,4,5,7,9,11,14,15,17,19,21,24,25,27,29,31 * *
 
 # 点赞☆Star触发编译
   watch:
@@ -40,8 +40,8 @@ env:
 
 jobs: 
   build:
-    runs-on: Ubuntu-20.04
-    if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-22.04
+    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
 
     name: 编译 ${{matrix.target}}
     strategy:
@@ -51,7 +51,7 @@ jobs:
 
     steps:
     - name: 准备完成
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: 检测脚本设置
       run: |
@@ -74,22 +74,22 @@ jobs:
         #添加变量
         echo "HOME=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
         echo "WORKPATH=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
-
-
-    - name: 开始安装编译所需系统
+        
+    - name: 初始化系统环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         docker rmi `docker images -q`
-        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
-        sudo -E apt-get update
-        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig libc6-dev-i386 libc6-dev libncurses5 libtinfo-dev libtinfo5 ncurses-doc python2.7 git-core wget curl rsync
-        sudo -E apt-get -y autoremove --purge
-        sudo -E apt-get clean
-        
+        sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+        sudo -E apt update
+        sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap* || true
+        sudo -E apt -y full-upgrade
+        sudo -E apt -y install ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+        sudo -E apt-get -y install xsltproc zip grep python3-pip python3-ply libc6-dev libncurses5 libtinfo-dev libtinfo5 ncurses-doc python2.7 git-core wget curl rsync
+        sudo -E systemctl daemon-reload
+        sudo -E apt -y autoremove --purge
+        sudo -E apt clean
         df -hT
-
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
@@ -125,6 +125,7 @@ jobs:
         # 复制配置文件到源码目录
         cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
         cd openwrt
+        
         echo "执行脚本"
         if [ -f "${WORKPATH}/$CUSTOM_SH" ]; then
         (
@@ -132,6 +133,7 @@ jobs:
           /bin/bash "${WORKPATH}/$CUSTOM_SH"
         )
         fi
+        
         echo "复制文件..."
         if [ -n "$(ls -A "${WORKPATH}/files" 2>/dev/null)" ]; then
          cp -rf ${WORKPATH}/files files
@@ -143,10 +145,10 @@ jobs:
         echo "写入配置文件..."
         mv ${WORKPATH}/$CONFIG_FILE .config
         make defconfig
-
-    - name: SSH远程连接服务器配置固件
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+        
+    - name: SSH远程连接服务器
+      uses: danshui-git/debugger-action@main
+      if: env.SSH_ACTIONS == 'true' || (github.event.inputs.SSH_ACTION == 'true')
 
     - name: 输出编译信息
       run: |
@@ -234,35 +236,35 @@ jobs:
         echo "BUILD_TIME=${HOUR}时${MIN}分${SEC}秒" >> $GITHUB_ENV
 
     - name: 上传固件文件
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
-      uses: actions/upload-artifact@v2
+      if: steps.compile.outcome == 'success' && env.UPLOAD_FIRMWARE == 'true'
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_firmware_${{matrix.target}}_${{ env.FILE_DATE }}
         path: ./artifact/firmware/
 
     - name: 上传vmware镜像文件
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_VMDK == 'true'
-      uses: actions/upload-artifact@v2
+      if: steps.compile.outcome == 'success' && env.UPLOAD_VMDK == 'true'
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_vmware_${{matrix.target}}_${{ env.FILE_DATE }}
         path: ./artifact/vmware/
 
     - name: 上传插件包文件
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
-      uses: actions/upload-artifact@v2
+      if: steps.compile.outcome == 'success' && env.UPLOAD_IPK == 'true'
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_package_${{matrix.target}}_${{ env.FILE_DATE }}
         path: ./artifact/package/
 
     - name: 上传固件配置信息
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_CONFIG == 'true'
-      uses: actions/upload-artifact@v2
+      if: steps.compile.outcome == 'success' && env.UPLOAD_CONFIG == 'true'
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_buildinfo_${{matrix.target}}_${{ env.FILE_DATE }}
         path: ./artifact/buildinfo/
 
     - name: 上传固件到 WeTransfer
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      if: steps.compile.outcome == 'success' && env.UPLOAD_WETRANSFER == 'true'
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ./artifact/firmware/ 2>&1 | tee wetransfer.log
@@ -270,48 +272,55 @@ jobs:
         echo "WETRANSFER_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV 
 
     - name: 自动发布固件到 Releases
-      uses: softprops/action-gh-release@v1
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
-      env:
-        GITHUB_TOKEN: ${{ secrets.Tiny_TOKEN }}
+      uses: ncipollo/release-action@main
+      if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        name: ${{ env.FILE_DATE1 }} 「 ${{ env.WXFB_MESSAGE }} 」固件
-        tag_name: ${{ env.FILE_DATE2 }}-${{matrix.target}}
+        name: ${{ env.FILE_TIME1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
+        tag: ${{ env.FILE_TIME2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        token: ${{ secrets.GIT_USER_TOKEN }}
         body: |            
-            ☆  源码 : ${{ env.REPO_URL }}
-            ☆  分支 : ${{ env.REPO_BRANCH }}
-            ☆  感谢源码作者无私分享！
+            ★  源码 : ${{ env.REPO_URL }}
+            ★  分支 : ${{ env.REPO_BRANCH }}
+            ★  感谢源码作者无私分享！
             
-            🎉 [ ${{ env.WXFB_MESSAGE }} ]固件下载 ✨
+            🛠 编译版本：${{ env.DISTRIB_REVISION }}
             
-            ⛄ WeTransfer(国外高速🚀下载)： ${{ env.WETRANSFER_URL }}
+            🎈 编译时间：${{ env.FILE_DATE1 }}
             
-            🌴 链接有效期为7天，无需注册直接下载 🐤
+            ⏰ 编译用时：${{ env.BUILD_DATE }}
             
+            🎉 [ ${{ env.FIRMWARE_MESSAGE }} ]固件下载
+            
+            ━━━━━━━━━━━━━━━━━━━━
+            
+            ➤ WeTransfer： ${{ env.WETRANSFER_URL }}
+            
+               WeTransfer链接有效期为7天，无需注册直接下载
+               
             =========================================
             
-        files: ./artifact/firmware/*
+        artifacts: ./artifact/firmware/*
 
     - name: 删除旧的GitHub-workflow
-      uses: Mattraks/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@v2
       with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}       
           retain_days: 30
-          keep_minimum_runs: 30    #保留多少个workflow不删除
+          keep_minimum_runs: 10    #保留多少个workflow不删除
 
     - name: 删除自动发布的旧固件
-      uses: dev-drprasad/delete-older-releases@v0.1.0
-      if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
+      uses: shidahuilang/delete-older-releases@main
+      if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        keep_latest: 60         #保留多少个releases不删除
+        keep_latest: 50         #保留多少个releases不删除
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: 完成编译微信通知
       uses: emon100/Action-Serverchan@v2
-      if: steps.organizer.outputs.status == 'success' && env.SERVERCHAN_SCKEY == 'true'
+      if: steps.compile.outcome == 'success' && env.SERVERCHAN_SCKEY == 'true'
       with:
         SCKEY: ${{ secrets.WEIXIN_SCKEY }}
         text: 恭喜${{matrix.target}}固件编译成功！
