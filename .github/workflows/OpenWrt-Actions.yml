@@ -12,10 +12,11 @@ name: 编译OpenWrt固件
 on:
   workflow_dispatch:
     inputs:
-      ssh:
-        description: '编译OpenWrt固件-SSH远程：改为“ssh”打开SSH连接'
+      SSH_ACTION:
+        description: 'SSH远程配置固件'
         required: false
-        default: 'ssh-actions'
+        default: 'false'
+        type: boolean
 
 # 定时触发编译(1,2,5,6,8,10,12,15,16,18,20,22,25,26,28,30早3点)
   schedule:
@@ -112,7 +113,6 @@ jobs:
       id: date
       run: |
         sudo timedatectl set-timezone "$TZ"
-        echo "::set-output name=status::success"
         echo "FILE_DATE=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
         echo "FILE_DATE1=$(date "+%Y年%m月%d号-%H点%M分")" >> $GITHUB_ENV
         echo "FILE_DATE2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
