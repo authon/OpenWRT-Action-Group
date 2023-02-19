@@ -8,6 +8,7 @@
 cat feeds.conf.default
 
 # 添加第三方软件包
+git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 git clone https://github.com/fw876/helloworld.git package/helloworld
 git clone https://github.com/jerrykuku/luci-theme-argon.git -b 18.06 package/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
