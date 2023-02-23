@@ -275,9 +275,9 @@ jobs:
       uses: ncipollo/release-action@main
       if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        name: ${{ env.FILE_TIME1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
-        tag: ${{ env.FILE_TIME2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
-        token: ${{ secrets.GIT_USER_TOKEN }}
+        name: ${{ env.FILE_DATE1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
+        tag: ${{ env.FILE_DATE2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        token: ${{ secrets.Tiny_TOKEN }}
         body: |            
             ★  源码 : ${{ env.REPO_URL }}
             ★  分支 : ${{ env.REPO_BRANCH }}
@@ -304,7 +304,7 @@ jobs:
     - name: 删除旧的GitHub-workflow
       uses: Mattraks/delete-workflow-runs@v2
       with:
-          token: ${{ github.token }}
+          token: ${{ secrets.Tiny_TOKEN }}
           repository: ${{ github.repository }}       
           retain_days: 30
           keep_minimum_runs: 10    #保留多少个workflow不删除
@@ -316,7 +316,7 @@ jobs:
         keep_latest: 50         #保留多少个releases不删除
         delete_tags: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.Tiny_TOKEN }}
 
     - name: 完成编译微信通知
       uses: emon100/Action-Serverchan@v2
