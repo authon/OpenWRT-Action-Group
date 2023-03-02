@@ -27,6 +27,10 @@ svn co https://github.com/authon/openwrt-package-app/trunk/luci-theme-bootstrap-
 rm -rf package/lean/luci-theme-argon
 # rm -rf feeds/packages/net/haproxy
 
+# 读取内核版本
+KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')
+KERNEL_TESTING_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_TESTING_PATCHVER | sed 's/^.\{25\}//g')
+#
 # 自定义定制选项
 sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate #定制默认IP
 sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings #取消系统默认密码
