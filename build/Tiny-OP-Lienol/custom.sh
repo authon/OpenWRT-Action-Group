@@ -26,14 +26,17 @@ rm -rf package/lean/luci-app-turboacc
 # svn co https://github.com/openwrt/packages/branches/openwrt-19.07/libs/libcap feeds/packages/libs/libcap
 
 # 自定义定制选项
-
 ZZZ="package/default-settings/files/zzz-default-settings"
+# 读取内核版本
+KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')
+KERNEL_TESTING_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_TESTING_PATCHVER | sed 's/^.\{25\}//g')
 #
 sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate          # 定制默认IP
 sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                             # 取消系统默认密码
 sed -i "/uci commit system/i\uci set system.@system[0].hostname='Authon-WRT'" $ZZZ        # 修改主机名称为OpenWrt-X86
 sed -i "s/OpenWrt /Authon build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ           # 增加自己个性名称
 sed -i 's@.*view/admin_status/index*@#&@g' $ZZZ                                           # 在首页显示一些服务
+sed -i "s/$KERNEL_PATCHVER/$KERNEL_TESTING_PATCHVER/g" target/linux/x86/Makefile          # 修改内核版本为最新
 # sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                     # 修改内核版本为4.19
 # sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/argon" $ZZZ      # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
 
