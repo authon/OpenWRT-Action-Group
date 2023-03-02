@@ -82,6 +82,7 @@ jobs:
       run: |
         docker rmi `docker images -q`
         sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+        sudo -E apt-mark hold grub-efi-amd64-signed
         sudo -E apt update
         sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap* || true
         sudo -E apt -y full-upgrade
@@ -161,7 +162,10 @@ jobs:
         echo
         ZZZ="package/lean/default-settings/files/zzz-default-settings"
         echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
+        echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
         echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
+        echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+       
         echo
         echo "=========================================="
         grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
@@ -285,6 +289,8 @@ jobs:
             
             🛠 编译版本：${{ env.DISTRIB_REVISION }}
             
+            🖥 内核版本：${{ env.KERNEL_PATCHVER }}
+
             🎈 编译时间：${{ env.FILE_DATE1 }}
             
             ⏰ 编译用时：${{ env.BUILD_DATE }}
@@ -326,6 +332,11 @@ jobs:
         text: 恭喜${{matrix.target}}固件编译成功！
         desp: 您的${{ env.WXFB_MESSAGE }}固件成功编译完成了！
 
+              🛠 编译版本：${{ env.DISTRIB_REVISION }}
+            
+            
+              🖥 内核版本：${{ env.KERNEL_PATCHVER }}
+              
               
               完成时间：${{ env.FILE_DATE1 }}
               
