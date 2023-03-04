@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Tiny-OP,Tiny-OP-Lienol,Tiny-OP-Pure]
+        target: [Tiny-OP,Tiny-OP-Pure]
 
     steps:
     - name: 准备完成
@@ -60,7 +60,7 @@ jobs:
         echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
         echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
         echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV
-        echo "WXFB_MESSAGE=${WXFB_MESSAGE}" >> $GITHUB_ENV
+        echo "FIRMWARE_MESSAGE=${FIRMWARE_MESSAGE}" >> $GITHUB_ENV
         echo "CUSTOM_SH=${CUSTOM_SH}" >> $GITHUB_ENV
         echo "CACHE_BUILD=${CACHE_BUILD}" >> $GITHUB_ENV
         echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
@@ -114,9 +114,9 @@ jobs:
       id: date
       run: |
         sudo timedatectl set-timezone "$TZ"
-        echo "FILE_DATE=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
-        echo "FILE_DATE1=$(date "+%Y年%m月%d号-%H点%M分")" >> $GITHUB_ENV
-        echo "FILE_DATE2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
+        echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
+        echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
+        echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
         echo "编译开始时间..."
         START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
         echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
@@ -219,6 +219,8 @@ jobs:
       id: organizer
       run: |
         mkdir -p ./artifact/firmware
+        mkdir -p ./artifact/pvekvm
+        mkdir -p ./artifact/hyperv
         mkdir -p ./artifact/vmware
         mkdir -p ./artifact/package
         mkdir -p ./artifact/buildinfo
@@ -230,7 +232,6 @@ jobs:
         cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*qcow2*") ./artifact/pvekvm/ || true
         cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vhdx*") ./artifact/hyperv/ || true
         cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vmdk*") ./artifact/vmware/ || true
-        echo "::set-output name=status::success"
         echo "编译完成时间..."
         START_SECONDS=${{ env.START_SECONDS }}
         END_TIME=`date +'%Y-%m-%d %H:%M:%S'`
@@ -239,32 +240,46 @@ jobs:
         HOUR=$(( $SECONDS/3600 )) && MIN=$(( ($SECONDS-${HOUR}*3600)/60 )) && SEC=$(( $SECONDS-${HOUR}*3600-${MIN}*60 ))
         echo "BUILD_TIME=${HOUR}时${MIN}分${SEC}秒" >> $GITHUB_ENV
 
-    - name: 上传固件文件
+   - name: 上传固件文件
       if: steps.compile.outcome == 'success' && env.UPLOAD_FIRMWARE == 'true'
       uses: actions/upload-artifact@main
       with:
-        name: OpenWrt_firmware_${{matrix.target}}_${{ env.FILE_DATE }}
+        name: OpenWrt_firmware_${{matrix.target}}_${{ env.FILE_TIME }}
         path: ./artifact/firmware/
 
-    - name: 上传vmware镜像文件
+    - name: 上传PVE/KVM镜像文件
+      if: steps.compile.outcome == 'success' && env.UPLOAD_QCOW2 == 'true'
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_pvekvm_${{matrix.target}}_${{ env.FILE_TIME }}
+        path: ./artifact/pvekvm/
+
+    - name: 上传Hyper-V镜像文件
+      if: steps.compile.outcome == 'success' && env.UPLOAD_VHDX == 'true'
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_hyperv_${{matrix.target}}_${{ env.FILE_TIME }}
+        path: ./artifact/hyperv/
+
+    - name: 上传VMware镜像文件
       if: steps.compile.outcome == 'success' && env.UPLOAD_VMDK == 'true'
       uses: actions/upload-artifact@main
       with:
-        name: OpenWrt_vmware_${{matrix.target}}_${{ env.FILE_DATE }}
+        name: OpenWrt_vmware_${{matrix.target}}_${{ env.FILE_TIME }}
         path: ./artifact/vmware/
 
     - name: 上传插件包文件
       if: steps.compile.outcome == 'success' && env.UPLOAD_IPK == 'true'
       uses: actions/upload-artifact@main
       with:
-        name: OpenWrt_package_${{matrix.target}}_${{ env.FILE_DATE }}
+        name: OpenWrt_package_${{matrix.target}}_${{ env.FILE_TIME }}
         path: ./artifact/package/
 
-    - name: 上传固件配置信息
+    - name: 上传固件信息
       if: steps.compile.outcome == 'success' && env.UPLOAD_CONFIG == 'true'
       uses: actions/upload-artifact@main
       with:
-        name: OpenWrt_buildinfo_${{matrix.target}}_${{ env.FILE_DATE }}
+        name: OpenWrt_buildinfo_${{matrix.target}}_${{ env.FILE_TIME }}
         path: ./artifact/buildinfo/
 
     - name: 上传固件到 WeTransfer
@@ -279,8 +294,8 @@ jobs:
       uses: ncipollo/release-action@main
       if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        name: ${{ env.FILE_DATE1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
-        tag: ${{ env.FILE_DATE2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        name: ${{ env.FILE_TIME1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
+        tag: ${{ env.FILE_TIME2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
         token: ${{ secrets.Tiny_TOKEN }}
         body: |            
             ★  源码 : ${{ env.REPO_URL }}
@@ -290,10 +305,10 @@ jobs:
             🛠 编译版本：${{ env.DISTRIB_REVISION }}
             
             🖥 内核版本：${{ env.KERNEL_PATCHVER }}
-
-            🎈 编译时间：${{ env.FILE_DATE1 }}
             
-            ⏰ 编译用时：${{ env.BUILD_DATE }}
+            🎈 编译时间：${{ env.FILE_TIME1 }}
+            
+            ⏰ 编译用时：${{ env.BUILD_TIME }}
             
             🎉 [ ${{ env.FIRMWARE_MESSAGE }} ]固件下载
             
@@ -313,7 +328,7 @@ jobs:
           token: ${{ secrets.Tiny_TOKEN }}
           repository: ${{ github.repository }}       
           retain_days: 30
-          keep_minimum_runs: 10    #保留多少个workflow不删除
+          keep_minimum_runs: 0    #保留多少个workflow不删除
 
     - name: 删除自动发布的旧固件
       uses: shidahuilang/delete-older-releases@main
@@ -330,21 +345,19 @@ jobs:
       with:
         SCKEY: ${{ secrets.WEIXIN_SCKEY }}
         text: 恭喜${{matrix.target}}固件编译成功！
-        desp: 您的${{ env.WXFB_MESSAGE }}固件成功编译完成了！
-
-              🛠 编译版本：${{ env.DISTRIB_REVISION }}
-            
-            
-              🖥 内核版本：${{ env.KERNEL_PATCHVER }}
-              
-              
-              完成时间：${{ env.FILE_DATE1 }}
-              
-              
-              发布地址：${{ env.GITHUB_RELEASE }}
+        desp: 您的${{ env.FIRMWARE_MESSAGE }}件成功编译完成了！
+        
+          🛠 编译版本：${{ env.DISTRIB_REVISION }}
           
-                  
-              WeTransfer：${{ env.WETRANSFER_URL }}
-              
-              
-              固件已经编译完成 🎈！！！
+          🖥 内核版本：${{ env.KERNEL_PATCHVER }}
+          
+          🎈 编译时间：${{ env.FILE_TIME1 }}
+          
+          ⏰ 编译用时：${{ env.BUILD_TIME }}
+          
+          🎉 发布地址：${{ env.GITHUB_RELEASE }}
+          
+          ⛄ WeTransfer：${{ env.WETRANSFER_URL }}
+          
+          🌴 固件已经编译完成 🎈！！！" >/dev/null 2>&1 && echo "ok..."
+
