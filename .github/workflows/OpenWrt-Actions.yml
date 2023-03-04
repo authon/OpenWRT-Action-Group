@@ -359,5 +359,5 @@ jobs:
           
           ⛄ WeTransfer：${{ env.WETRANSFER_URL }}
           
-          🌴 固件已经编译完成 🎈！！！" >/dev/null 2>&1 && echo "ok..."
+          🌴 固件已经编译完成 🎈！！！
 
