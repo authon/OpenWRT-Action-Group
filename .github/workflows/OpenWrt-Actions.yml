@@ -39,7 +39,7 @@ env:
   TZ: Asia/Shanghai
   GITHUB_RELEASE: https://github.com/authon/OpenWRT-Action-Group/releases
 
-jobs:
+jobs: 
   build:
     runs-on: ubuntu-22.04
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
@@ -240,7 +240,7 @@ jobs:
         HOUR=$(( $SECONDS/3600 )) && MIN=$(( ($SECONDS-${HOUR}*3600)/60 )) && SEC=$(( $SECONDS-${HOUR}*3600-${MIN}*60 ))
         echo "BUILD_TIME=${HOUR}时${MIN}分${SEC}秒" >> $GITHUB_ENV
 
-   - name: 上传固件文件
+    - name: 上传固件文件
       if: steps.compile.outcome == 'success' && env.UPLOAD_FIRMWARE == 'true'
       uses: actions/upload-artifact@main
       with:
