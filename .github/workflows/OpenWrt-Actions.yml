@@ -339,15 +339,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.Tiny_TOKEN }}
 
-
-    - name: Sending message
-      uses: yakumioto/serverchan-action@v2
+    - name: 完成编译微信通知
+      uses: emon100/Action-Serverchan@v2
       if: steps.compile.outcome == 'success' && env.SERVERCHAN_SCKEY == 'true'
       with:
+        SCKEY: ${{ secrets.WEIXIN_SCKEY }}
         key: ${{ secrets.WEIXIN_SCKEY }}
         text: 恭喜${{matrix.target}}固件编译成功！
         desp: 您的${{ env.FIRMWARE_MESSAGE }}件成功编译完成了！
-        
+
           🛠 编译版本：${{ env.DISTRIB_REVISION }}
           
           🖥 内核版本：${{ env.KERNEL_PATCHVER }}
@@ -359,6 +359,6 @@ jobs:
           🎉 发布地址：${{ env.GITHUB_RELEASE }}
           
           ⛄ WeTransfer：${{ env.WETRANSFER_URL }}
-          
+
           🌴 固件已经编译完成 🎈！！！
-        #openid: {选填。抄送给其他关注你测试号的 openid ，多个 openid 用 , 隔开。}
+
