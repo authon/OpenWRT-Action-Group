@@ -340,7 +340,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.Tiny_TOKEN }}
 
     - name: 完成编译微信通知
-      uses: emon100/Action-Serverchan@v2
+      uses: emon100/Action-Serverchan@v3
       if: steps.compile.outcome == 'success' && env.SERVERCHAN_SCKEY == 'true'
       with:
         SCKEY: ${{ secrets.WEIXIN_SCKEY }}
