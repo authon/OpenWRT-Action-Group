@@ -15,7 +15,7 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/auth
 
 # 更新并安装源
 ./scripts/feeds clean
-./scripts/feeds update -a && ./scripts/feeds install -a
+./scripts/feeds update -a && ./scripts/feeds install -a -f
 
 # 删除部分默认包
 rm -rf package/lean/luci-theme-argon
