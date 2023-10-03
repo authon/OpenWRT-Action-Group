@@ -4,7 +4,7 @@
 # sudo -E apt-get -y install rename
 
 # 更新feeds文件
-# sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
+sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
 cat feeds.conf.default
 
 # 添加第三方软件包
@@ -15,7 +15,7 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/auth
 
 # 更新并安装源
 ./scripts/feeds clean
-./scripts/feeds update -a && ./scripts/feeds install -a -f
+./scripts/feeds update -a && ./scripts/feeds install -a
 
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
@@ -35,7 +35,7 @@ sed -i 's#192.168.1.1#10.10.10.1#g' package/base-files/files/bin/config_generate
 sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                                        # 取消系统默认密码
 sed -i "/uci commit system/i\uci set system.@system[0].hostname='Authon-WRT'" $ZZZ                   # 修改主机名称为OpenWrt-X86
 sed -i "s/OpenWrt /Authon build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ                      # 增加自己个性名称
-sed -i "s/$KERNEL_PATCHVER/$KERNEL_TESTING_PATCHVER/g" target/linux/x86/Makefile                     # 修改内核版本为最新
+# sed -i "s/$KERNEL_PATCHVER/$KERNEL_TESTING_PATCHVER/g" target/linux/x86/Makefile                     # 修改内核版本为最新
 # sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                                # 修改内核版本为4.19
 # sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/atmaterial_red" $ZZZ        # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
 
