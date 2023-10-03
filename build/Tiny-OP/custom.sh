@@ -18,8 +18,8 @@ git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/auth
 ./scripts/feeds update -a && ./scripts/feeds install -a -f
 
 # 删除部分默认包
-rm -rf package/lean/luci-theme-argon
-rm -rf package/lean/v2ray-plugin
+rm -rf feeds/luci/applications/luci-app-qbittorrent
+rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/packages/net/haproxy
 # rm -rf package/lean/luci-app-sfe
 # rm -rf package/lean/luci-app-flowoffload
