@@ -265,14 +265,13 @@ EOF
 
 # LuCI主题:
 cat >> .config <<EOF
-CONFIG_PACKAGE_luci-theme-atmaterial=y
-CONFIG_PACKAGE_luci-theme-netgear=y
-CONFIG_PACKAGE_luci-theme-edge=y
-CONFIG_PACKAGE_luci-theme-argon=y
-CONFIG_PACKAGE_luci-theme-argon-dark-mod=y
-CONFIG_PACKAGE_luci-theme-argon-light-mod=y
-CONFIG_PACKAGE_luci-theme-bootstrap-mod=y
-CONFIG_PACKAGE_luci-theme-netgear-mc=y
+CONFIG_PACKAGE_luci-theme-atmaterial=n
+CONFIG_PACKAGE_luci-theme-netgear=n
+CONFIG_PACKAGE_luci-theme-edge=n
+CONFIG_PACKAGE_luci-theme-argon-dark-mod=n
+CONFIG_PACKAGE_luci-theme-argon-light-mod=n
+CONFIG_PACKAGE_luci-theme-bootstrap-mod=n
+CONFIG_PACKAGE_luci-theme-netgear-mc=n
 CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-app-argon-config=y
 EOF
