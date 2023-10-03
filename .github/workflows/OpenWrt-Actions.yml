@@ -51,9 +51,6 @@ jobs:
         target: [Tiny-OP,Tiny-OP-Pure]
 
     steps:
-    - name: 准备完成
-      uses: actions/checkout@v3
-
     - name: 检测脚本设置
       run: |
         source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
@@ -94,6 +91,9 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+
+    - name: 准备完成
+      uses: actions/checkout@v3
 
     - name: 下载${{matrix.target}}源码
       working-directory: /workdir
@@ -192,7 +192,7 @@ jobs:
 
     - name: 下载软件包
       run: |
-        cd openwrt && make download -j8
+        cd openwrt && make download -j16
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
