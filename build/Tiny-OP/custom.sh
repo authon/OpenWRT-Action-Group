@@ -8,6 +8,7 @@ sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用he
 sed -i '$a src-git kenzo https://github.com/kenzok8/small-package' feeds.conf.default
 sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall' feeds.conf.default
+# sed -i '$a src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages' feeds.conf.default
 cat feeds.conf.default
 
 # 添加第三方软件包
@@ -23,6 +24,7 @@ cat feeds.conf.default
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
 rm -rf feeds/luci/themes/luci-theme-argon
+rm -rf feeds/packages/lang/golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
 # rm -rf feeds/packages/net/haproxy
 # rm -rf package/lean/luci-app-sfe
 # rm -rf package/lean/luci-app-flowoffload
