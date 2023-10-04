@@ -94,8 +94,6 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-        git /home/runner/work/OpenWRT-Action-Group/OpenWRT-Action-Group/config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git /home/runner/work/OpenWRT-Action-Group/OpenWRT-Action-Group/config --global user.name "github-actions[bot]"
 
     - name: 下载${{matrix.target}}源码
       working-directory: /workdir
