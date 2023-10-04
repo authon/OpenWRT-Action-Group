@@ -102,11 +102,13 @@ jobs:
         git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
-    - name: 缓存加速
+    - name: Cache缓存加速
       uses: stupidloud/cachewrtbuild@main
       if: env.CACHE_BUILD == 'true'
       with:
         ccache: 'true'
+        mixkey: ${{ matrix.target }}
+        clean: ${{ contains(github.event.action, 'nocache') }}
         prefix: ${{ github.workspace }}/openwrt
     
     - name: 更新时区、编译时间
