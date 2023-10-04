@@ -23,7 +23,7 @@ cat feeds.conf.default
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
 rm -rf feeds/luci/themes/luci-theme-argon
-rm -rf feeds/packages/net/haproxy
+# rm -rf feeds/packages/net/haproxy
 # rm -rf package/lean/luci-app-sfe
 # rm -rf package/lean/luci-app-flowoffload
 # rm -rf package/lean/luci-app-turboacc
