@@ -24,7 +24,9 @@ cat feeds.conf.default
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
 rm -rf feeds/luci/themes/luci-theme-argon
-rm -rf feeds/packages/lang/golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
+pushd feeds/packages/lang
+rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
+popd
 # rm -rf feeds/packages/net/haproxy
 # rm -rf package/lean/luci-app-sfe
 # rm -rf package/lean/luci-app-flowoffload
@@ -184,11 +186,11 @@ EOF
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-passwall=y
 # CONFIG_PACKAGE_naiveproxy=y
-CONFIG_PACKAGE_chinadns-ng=y
+# CONFIG_PACKAGE_chinadns-ng=y
 # CONFIG_PACKAGE_brook=y
-CONFIG_PACKAGE_trojan-go=y
-CONFIG_PACKAGE_xray-plugin=y
-CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
+# CONFIG_PACKAGE_trojan-go=y
+# CONFIG_PACKAGE_xray-plugin=y
+# CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
 EOF
 
 # Turbo ACC 网络加速:
