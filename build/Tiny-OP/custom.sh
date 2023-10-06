@@ -166,12 +166,12 @@ EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-oaf=n #应用过滤
-# CONFIG_PACKAGE_luci-app-openclash=n #OpenClash
-# CONFIG_PACKAGE_luci-app-serverchan=n #微信推送
+# CONFIG_PACKAGE_luci-app-oaf is not set #应用过滤
+# CONFIG_PACKAGE_luci-app-openclash is not set #OpenClash
+# CONFIG_PACKAGE_luci-app-serverchan is not set #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
-# CONFIG_PACKAGE_luci-app-smartdns=n #smartdns服务器
-# CONFIG_PACKAGE_luci-app-adguardhome=n #ADguardhome
+# CONFIG_PACKAGE_luci-app-smartdns is not set #smartdns服务器
+# CONFIG_PACKAGE_luci-app-adguardhome is not set #ADguardhome
 EOF
 
 # ShadowsocksR插件:
@@ -193,6 +193,16 @@ EOF
 # Passwall插件2:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-passwall=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client=y
+CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
+CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Brook=y
 CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Hysteria=y
@@ -204,16 +214,6 @@ CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Server=y
 CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_tuic_client=y
 CONFIG_PACKAGE_luci-app-passwall2_Iptables_Transparent_Proxy=y
 CONFIG_PACKAGE_luci-app-passwall2_Nftables_Transparent_Proxy=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client=y
-CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
-CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
 EOF
 
 # Turbo ACC 网络加速:
@@ -226,27 +226,27 @@ EOF
 
 # 常用LuCI插件:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-adbyby-plus=y #adbyby去广告
+# CONFIG_PACKAGE_luci-app-adbyby-plus is not set #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
 CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
 CONFIG_DEFAULT_luci-app-vlmcsd=y #KMS激活服务器
-CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 # CONFIG_PACKAGE_luci-app-autoreboot is not set #定时重启
 CONFIG_PACKAGE_luci-app-upnp=y #通用即插即用UPnP(端口自动转发)
 CONFIG_PACKAGE_luci-app-accesscontrol=y #上网时间控制
 CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
-# CONFIG_PACKAGE_luci-app-frpc=n #Frp内网穿透
-# CONFIG_PACKAGE_luci-app-nlbwmon=n #宽带流量监控
-# CONFIG_PACKAGE_luci-app-wrtbwmon=n #实时流量监测
+# CONFIG_PACKAGE_luci-app-frpc is not set #Frp内网穿透
+CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
+# CONFIG_PACKAGE_luci-app-wrtbwmon is not set #实时流量监测
 # CONFIG_PACKAGE_luci-app-sfe=n #高通开源的 Shortcut FE 转发加速引擎
 # CONFIG_PACKAGE_luci-app-flowoffload=n #开源 Linux Flow Offload 驱动
 CONFIG_PACKAGE_luci-app-arpbind=y #IP/MAC绑定
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-ttyd=y
-CONFIG_PACKAGE_luci-app-ntpc=y
+# CONFIG_PACKAGE_luci-app-ntpc is not set
 # CONFIG_PACKAGE_luci-app-netdata is not set #使用监控（日志报错不启用）
+CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-fileassistant=y
-# CONFIG_PACKAGE_luci-app-filebrowser=y
+# CONFIG_PACKAGE_luci-app-filebrowser is not set
 CONFIG_PACKAGE_luci-app-uhttpd=y
 CONFIG_PACKAGE_luci-app-ramfree=y #内存释放
 CONFIG_PACKAGE_luci-app-poweroff=y #关机（增加关机功能）
@@ -263,14 +263,16 @@ CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
 # CONFIG_PACKAGE_luci-app-zerotier is not set #zerotier内网穿透
 # CONFIG_PACKAGE_luci-app-hd-idle is not set #磁盘休眠
 # CONFIG_PACKAGE_luci-app-unblockmusic is not set #解锁网易云灰色歌曲
+# CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go is not set
+# CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic is not set
 # CONFIG_PACKAGE_luci-app-airplay2 is not set #Apple AirPlay2音频接收服务器
 # CONFIG_PACKAGE_luci-app-music-remote-center is not set #PCHiFi数字转盘遥控
 # CONFIG_PACKAGE_luci-app-usb-printer is not set #USB打印机
 # CONFIG_PACKAGE_luci-app-sqm is not set #SQM智能队列管理
-# CONFIG_PACKAGE_luci-app-uugamebooster=n #UU游戏加速器
-# CONFIG_PACKAGE_luci-app-jd-dailybonus=y #京东签到
-# CONFIG_PACKAGE_luci-app-dockerman=n #Docker管理
-# CONFIG_PACKAGE_luci-app-wireguard=n #wireguard端
+# CONFIG_PACKAGE_luci-app-uugamebooster is not set #UU游戏加速器
+# CONFIG_PACKAGE_luci-app-jd-dailybonus is not set #京东签到
+# CONFIG_PACKAGE_luci-app-dockerman is not set #Docker管理
+# CONFIG_PACKAGE_luci-app-wireguard is not set #wireguard端
 #
 # VPN相关插件(禁用):
 #
@@ -283,22 +285,22 @@ CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
 #
 # 文件共享相关(禁用):
 #
-CONFIG_PACKAGE_luci-app-minidlna=n #miniDLNA服务
-CONFIG_PACKAGE_luci-app-vsftpd=n #FTP 服务器
-CONFIG_PACKAGE_luci-app-samba=n #网络共享
-CONFIG_PACKAGE_autosamba=n #网络共享
-CONFIG_PACKAGE_samba36-server=n #网络共享
+CONFIG_PACKAGE_luci-app-minidlna is not set #miniDLNA服务
+CONFIG_PACKAGE_luci-app-vsftpd is not set #FTP 服务器
+CONFIG_PACKAGE_luci-app-samba is not set #网络共享
+CONFIG_PACKAGE_autosamba is not set #网络共享
+CONFIG_PACKAGE_samba36-server is not set #网络共享
 EOF
 
 # LuCI主题:
 cat >> .config <<EOF
-CONFIG_PACKAGE_luci-theme-atmaterial=n
-CONFIG_PACKAGE_luci-theme-netgear=n
-CONFIG_PACKAGE_luci-theme-edge=n
-CONFIG_PACKAGE_luci-theme-argon-dark-mod=n
-CONFIG_PACKAGE_luci-theme-argon-light-mod=n
-CONFIG_PACKAGE_luci-theme-bootstrap-mod=n
-CONFIG_PACKAGE_luci-theme-netgear-mc=n
+# CONFIG_PACKAGE_luci-theme-atmaterial=n
+# CONFIG_PACKAGE_luci-theme-netgear=n
+# CONFIG_PACKAGE_luci-theme-edge=n
+# CONFIG_PACKAGE_luci-theme-argon-dark-mod=n
+# CONFIG_PACKAGE_luci-theme-argon-light-mod=n
+# CONFIG_PACKAGE_luci-theme-bootstrap-mod=n
+# CONFIG_PACKAGE_luci-theme-netgear-mc=n
 CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-app-argon-config=y
 EOF
@@ -328,6 +330,10 @@ EOF
 # 其他软件包:
 cat >> .config <<EOF
 CONFIG_HAS_FPU=y
+# CONFIG_NODEJS_16 is not set
+# CONFIG_NODEJS_12 is not set
+# CONFIG_NODEJS_14 is not set
+# CONFIG_NODEJS_18 is not set
 EOF
 
 # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
