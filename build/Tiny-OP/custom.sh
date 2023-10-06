@@ -23,6 +23,7 @@ cat feeds.conf.default
 
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
+rm -rf feeds/luci/applications/luci-app-autoreboot
 rm -rf feeds/luci/themes/luci-theme-argon
 pushd feeds/packages/lang
 rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
