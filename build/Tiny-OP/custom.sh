@@ -28,9 +28,9 @@ rm -rf feeds/luci/themes/luci-theme-argon
 pushd feeds/packages/lang
 rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
 popd 
-pushd feeds/packages/net
-rm -rf haproxy && svn co https://github.com/kenzok8/small-package/trunk/haproxy
-popd
+# pushd feeds/packages/net
+# rm -rf haproxy && svn co https://github.com/kenzok8/small-package/trunk/haproxy
+# popd
 # rm -rf package/lean/luci-app-sfe
 # rm -rf package/lean/luci-app-flowoffload
 # rm -rf package/lean/luci-app-turboacc
