@@ -25,7 +25,7 @@ cat feeds.conf.default
 # 删除部分默认包
 rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
 rm -rf feeds/luci/applications/luci-app-qbittorrent
-rm -rf feeds/luci/themes/luci-theme-argon
+# rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/packages/net/haproxy
 
 pushd feeds/packages/lang
