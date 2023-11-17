@@ -5,13 +5,14 @@
 
 # 更新feeds文件
 # sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
-sed -i '$a src-git kenzo https://github.com/kenzok8/small-package' feeds.conf.default
-# sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+# sed -i '$a src-git kenzo https://github.com/kenzok8/small-package' feeds.conf.default
+sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 # sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall' feeds.conf.default
 # sed -i '$a src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages' feeds.conf.default
 cat feeds.conf.default
 
 # 添加第三方软件包
+# git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
 # git clone https://github.com/fw876/helloworld.git package/helloworld
 # git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 # git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
@@ -19,15 +20,17 @@ cat feeds.conf.default
 
 # 更新并安装源
 ./scripts/feeds clean
-./scripts/feeds update -a && ./scripts/feeds install -a
+./scripts/feeds update -a && ./scripts/feeds install -a -f
 
 # 删除部分默认包
+rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
 rm -rf feeds/luci/applications/luci-app-qbittorrent
-rm -rf feeds/luci/applications/luci-app-autoreboot
 rm -rf feeds/luci/themes/luci-theme-argon
-pushd feeds/packages/lang
-rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
-popd 
+rm -rf feeds/packages/net/haproxy
+
+# pushd feeds/packages/lang
+# rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
+# popd 
 # pushd feeds/packages/net
 # rm -rf haproxy && svn co https://github.com/kenzok8/small-package/trunk/haproxy
 # popd
