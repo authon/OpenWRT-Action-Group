@@ -203,8 +203,8 @@ EOF
 
 # Turbo ACC 网络加速:
 cat >> .config <<EOF
-CONFIG_PACKAGE_luci-app-turboacc=y
-# luci-app-turboacc依赖
+# CONFIG_PACKAGE_luci-app-turboacc=y
+# luci-app-turboacc=y
 # CONFIG_PACKAGE_dnsproxy=y
 # CONFIG_PACKAGE_dnsforwarder=y
 EOF
@@ -270,11 +270,12 @@ CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
 #
 # 文件共享相关(禁用):
 #
-CONFIG_PACKAGE_luci-app-minidlna is not set #miniDLNA服务
-CONFIG_PACKAGE_luci-app-vsftpd is not set #FTP 服务器
-CONFIG_PACKAGE_luci-app-samba is not set #网络共享
-CONFIG_PACKAGE_autosamba is not set #网络共享
-CONFIG_PACKAGE_samba36-server is not set #网络共享
+# CONFIG_PACKAGE_luci-app-minidlna is not set #miniDLNA服务
+# CONFIG_PACKAGE_luci-app-vsftpd is not set #FTP 服务器
+# CONFIG_PACKAGE_luci-app-samba is not set #网络共享
+# CONFIG_PACKAGE_luci-app-samba64 is not set #网络共享
+# CONFIG_PACKAGE_autosamba is not set #网络共享
+# CONFIG_PACKAGE_samba36-server is not set #网络共享
 EOF
 
 # LuCI主题:
