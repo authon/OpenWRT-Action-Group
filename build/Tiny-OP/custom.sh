@@ -6,7 +6,7 @@
 # 更新feeds文件
 # sed -i 's@#src-git helloworld@src-git helloworld@g' feeds.conf.default #启用helloworld
 # sed -i '$a src-git kenzo https://github.com/kenzok8/small-package' feeds.conf.default
-sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+# sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 # sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall' feeds.conf.default
 # sed -i '$a src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages' feeds.conf.default
 cat feeds.conf.default
@@ -17,6 +17,7 @@ cat feeds.conf.default
 # git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 # git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
 # git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
+git clone https://github.com/kenzok8/small.git package/small
 
 # 更新并安装源
 ./scripts/feeds clean
@@ -27,6 +28,7 @@ rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftabl
 rm -rf feeds/luci/applications/luci-app-qbittorrent
 # rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/packages/net/haproxy
+rm -rf package/lean/autocore
 
 pushd feeds/packages/lang
 rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
