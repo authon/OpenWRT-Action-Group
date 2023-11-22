@@ -17,8 +17,8 @@ cat feeds.conf.default
 # git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 # git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
 # git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
-# git clone https://github.com/kenzok8/small.git package/small
-git clone https://github.com/kenzok8/small-package.git package/small-package
+git clone https://github.com/kenzok8/small.git package/small
+# git clone https://github.com/kenzok8/small-package.git package/small-package
 rm -rf package/helloworld
 git clone https://github.com/fw876/helloworld.git -b main package/helloworld
 # 更新并安装源
@@ -203,16 +203,16 @@ CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
 EOF
 
 # Turbo ACC 网络加速:
-cat >> .config <<EOF
+# cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-turboacc=y
 # luci-app-turboacc=y
 # CONFIG_PACKAGE_dnsproxy=y
 # CONFIG_PACKAGE_dnsforwarder=y
-EOF
+# EOF
 
 # 常用LuCI插件:
 cat >> .config <<EOF
-CONFIG_PACKAGE_luci-app-msd_lite=y
+# CONFIG_PACKAGE_luci-app-msd_lite=y
 # CONFIG_PACKAGE_luci-app-adbyby-plus is not set #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
 CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
