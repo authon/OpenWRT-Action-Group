@@ -18,7 +18,8 @@ cat feeds.conf.default
 # git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
 # git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
 git clone https://github.com/kenzok8/small.git package/small
-
+rm -rf package/helloworld
+git clone https://github.com/fw876/helloworld.git -b main package/helloworld
 # 更新并安装源
 ./scripts/feeds clean
 ./scripts/feeds update -a && ./scripts/feeds install -a -f
