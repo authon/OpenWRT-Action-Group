@@ -27,7 +27,6 @@ git clone https://github.com/kenzok8/small.git package/small
 rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
 rm -rf feeds/luci/applications/luci-app-qbittorrent
 # rm -rf feeds/luci/themes/luci-theme-argon
-rm -rf feeds/packages/net/haproxy
 rm -rf package/lean/autocore
 
 pushd feeds/packages/lang
