@@ -21,6 +21,8 @@ git clone https://github.com/kenzok8/small.git package/small
 # git clone https://github.com/kenzok8/small-package.git package/small-package
 rm -rf package/helloworld
 git clone https://github.com/fw876/helloworld.git -b main package/helloworld
+rm -rf mosdns
+rm -rf package/mosdns
 # 更新并安装源
 ./scripts/feeds clean
 ./scripts/feeds update -a && ./scripts/feeds install -a -f
@@ -31,9 +33,9 @@ rm -rf feeds/luci/applications/luci-app-qbittorrent
 # rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf package/lean/autocore
 
-pushd feeds/packages/lang
-rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
-popd 
+#pushd feeds/packages/lang
+#rm -rf golang && svn co https://github.com/openwrt/packages/branches/openwrt-23.05/lang/golang
+#popd 
 # pushd feeds/packages/net
 # rm -rf haproxy && svn co https://github.com/kenzok8/small-package/trunk/haproxy
 # popd
