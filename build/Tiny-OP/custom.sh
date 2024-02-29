@@ -17,18 +17,24 @@ cat feeds.conf.default
 # git clone https://github.com/xiaorouji/openwrt-passwall.git -b packages package/passwall
 # git clone https://github.com/db-one/dbone-packages.git -b 18.06 package/dbone-packages
 # git clone https://github.com/authon/authon-openwrt-hub.git -b 18.06 package/authon-openwrt-hub
-git clone https://github.com/kenzok8/small.git package/small
+# git clone https://github.com/kenzok8/small.git package/small
 # git clone https://github.com/kenzok8/small-package.git package/small-package
-rm -rf package/helloworld
-git clone https://github.com/fw876/helloworld.git -b main package/helloworld
+# rm -rf package/helloworld
+# git clone https://github.com/fw876/helloworld.git -b main package/helloworld
+# 移除 openwrt feeds 自带的核心包
+rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box}
+git clone https://github.com/sbwml/openwrt_helloworld package/helloworld
+
+# 更新 golang 1.22 版本
+rm -rf feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
+
 rm -rf mosdns
 rm -rf package/mosdns
 # 更新并安装源
 ./scripts/feeds clean
 ./scripts/feeds update -a && ./scripts/feeds install -a -f
 
-rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
 # 删除部分默认包
 rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
