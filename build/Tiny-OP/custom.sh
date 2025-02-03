@@ -186,7 +186,7 @@ EOF
 # 第三方插件选择:
 cat >> .config <<EOF
 # CONFIG_PACKAGE_luci-app-oaf is not set #应用过滤
-# CONFIG_PACKAGE_luci-app-openclash is not set #OpenClash
+CONFIG_PACKAGE_luci-app-openclash=y #OpenClash
 # CONFIG_PACKAGE_luci-app-serverchan is not set #微信推送
 CONFIG_PACKAGE_luci-app-eqos=y #IP限速
 # CONFIG_PACKAGE_luci-app-smartdns is not set #smartdns服务器
@@ -225,7 +225,7 @@ EOF
 
 # 常用LuCI插件:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-msd_lite=y
+# CONFIG_PACKAGE_luci-app-msd_lite is not set 
 # CONFIG_PACKAGE_luci-app-adbyby-plus is not set #adbyby去广告
 CONFIG_PACKAGE_luci-app-webadmin=y #Web管理页面设置
 CONFIG_PACKAGE_luci-app-ddns=y #DDNS服务
@@ -247,7 +247,7 @@ CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-filetransfer=y #系统-文件传输
 CONFIG_PACKAGE_luci-app-fileassistant=y
 # CONFIG_PACKAGE_luci-app-filebrowser is not set
-CONFIG_PACKAGE_luci-app-uhttpd=y
+# CONFIG_PACKAGE_luci-app-uhttpd is not set 
 CONFIG_PACKAGE_luci-app-ramfree=y #内存释放
 CONFIG_PACKAGE_luci-app-poweroff=y #关机（增加关机功能）
 CONFIG_PACKAGE_luci-app-control-mia=y #时间控制
@@ -311,9 +311,9 @@ cat >> .config <<EOF
 CONFIG_PACKAGE_curl=y
 CONFIG_PACKAGE_htop=y
 CONFIG_PACKAGE_nano=y
-# CONFIG_PACKAGE_screen=y
-# CONFIG_PACKAGE_tree=y
-# CONFIG_PACKAGE_vim-fuller=y
+CONFIG_PACKAGE_screen=y
+CONFIG_PACKAGE_tree=y
+CONFIG_PACKAGE_vim-fuller=y
 CONFIG_PACKAGE_wget=y
 CONFIG_PACKAGE_bash=y
 # CONFIG_PACKAGE_node is not set
