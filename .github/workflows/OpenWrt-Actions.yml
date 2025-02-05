@@ -404,9 +404,7 @@ jobs:
         key: ${{ secrets.WEIXIN_SCKEY }}
         text: 恭喜${{matrix.target}}固件编译成功！
         desp: 您的${{ env.FIRMWARE_MESSAGE }}件成功编译完成了！
-
-          🛠 编译版本：${{ env.DISTRIB_REVISION }}
-          
+         
           🖥 内核版本：${{ env.KERNEL_PATCHVER }}
           
           🎈 编译时间：${{ env.FILE_TIME1 }}
@@ -417,3 +415,4 @@ jobs:
           
           🌴 固件已经编译完成 🎈！！！
 
+#           🛠 编译版本：${{ env.DISTRIB_REVISION }}
