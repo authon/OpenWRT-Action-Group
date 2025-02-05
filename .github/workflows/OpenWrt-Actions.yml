@@ -357,21 +357,20 @@ jobs:
       if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
         name: ${{ env.FILE_TIME1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
-        tag: ${{ env.FILE_TIME }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        tag: ${{ env.FILE_TIME2 }}-${{matrix.target}}   
+        # tag: ${{ env.FILE_TIME }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        # 🛠 编译版本：${{ env.DISTRIB_REVISION }}
         token: ${{ secrets.Tiny_TOKEN }}
         body: |            
             ★  源码 : ${{ env.REPO_URL }}
             ★  分支 : ${{ env.REPO_BRANCH }}
             ★  感谢源码作者无私分享！
             
-            🛠 编译版本：${{ env.DISTRIB_REVISION }}
-            
             🖥 内核版本：${{ env.KERNEL_PATCHVER }}
             
             🎈 编译时间：${{ env.FILE_TIME1 }}
             
             ⏰ 编译用时：${{ env.BUILD_TIME }}
-            
             
             ━━━━━━━━━━━━━━━━━━━━
             
