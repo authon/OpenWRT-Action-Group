@@ -357,7 +357,7 @@ jobs:
       if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
         name: ${{ env.FILE_TIME1 }} 「 ${{ env.FIRMWARE_MESSAGE }} 」
-        tag: ${{ env.FILE_TIME2 }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
+        tag: ${{ env.FILE_TIME }}-${{matrix.target}}-${{ env.DISTRIB_REVISION }}
         token: ${{ secrets.Tiny_TOKEN }}
         body: |            
             ★  源码 : ${{ env.REPO_URL }}
